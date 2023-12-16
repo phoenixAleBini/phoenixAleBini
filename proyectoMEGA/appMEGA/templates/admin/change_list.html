@@ -1,0 +1,32 @@
+
+{% extends 'admin/base_site.html' %}
+
+{% load i18n admin_static %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static 'admin/css/change_list.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div id="content-main">
+        <h1>{{ title }}</h1>
+        {% block result_list %}
+            <div id="changelist">
+                <form id="changelist-form" method="post" novalidate>
+                    {% if cl.result_count %}
+                        {% results_header cl %}
+                        {% for result in cl.results %}
+                            {% change_list_results result %}
+                        {% endfor %}
+                        {% results_footer cl %}
+                    {% else %}
+                        {% empty_results cl %}
+                    {% endif %}
+                </form>
+            </div>
+        {% endblock %}
+    </div>
+{% endblock %}
+
+<!--la lista que muestra todas las instancias de la clase Propiedadcontratoaumentos.-->

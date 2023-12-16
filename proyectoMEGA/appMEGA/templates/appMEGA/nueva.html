@@ -1,0 +1,387 @@
+{% extends 'appMEGA/base-indexadmin.html' %}
+
+{% load static %}  <!-- Cargar etiquetas para archivos estáticos -->
+{% load tz %}     <!-- Cargar etiquetas para manejar zonas horarias -->
+{% load custom_tags %}   <!-- Cargar tus etiquetas personalizadas (si las tienes) -->
+
+{% block content %}
+
+<!------------- EMPRESA DUEÑA DE LA PROPIEDAD QUE SE ADMINISTRA (derecha)------------>     
+
+<div class="row justify-content-end">
+
+    {% for objeto in object %}
+
+    <!------- LOGO -(si se agrega otra empresa, agregar elif e imagen y logoi asociado desde el id_empresa)-------->  
+    
+            <div class="container">
+                <div class="col-md-12">
+                    <div class="text-center">
+                        <div class="mt-4">
+                            
+                            {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.id_empresas == 1 %}
+                                <img src="{% static 'appMEGA/img/logo1.png' %}" alt="Logo 1">
+    
+
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+    <!------------- EMPRESA ------------>     
+    
+          
+            <div class="col-xl-4 text-right" style="margin-right: 20px;">
+            
+                <p class="mt-0 mb-0 text-end">
+    
+                    {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_apellido1 %}
+                        {{ objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_apellido1 }}
+                        <input type="hidden" name="apellido1_hidden" value="{{ objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_apellido1  }}">
+                        {% endif %}
+                                    
+                    {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_apellido2 %}
+                        {{ objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_apellido2 }}
+                        <input type="hidden" name="apellido2_hidden" value="{{ objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_apellido2}}">
+                    {% endif %}
+                    
+                    {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_empresa_nombre1%}
+                        {{ objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_empresa_nombre1 }}
+                        <input type="hidden" name="nombre1_hidden" value="{{ objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_empresa_nombre1 }}">
+                    {% endif %}
+                    
+                    {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_empresa_nombre2%}
+                        {{ objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_empresa_nombre2 }}
+                        <input type="hidden" name="nombre2_hidden" value="{{ objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_empresa_nombre2  }}">
+                    {% endif %}
+                    
+                    {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_razon_social %}
+                        {{ objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_razon_social }}
+                        <input type="hidden" name="razon_social_hidden" value="{{ objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_razon_social }}">
+                    {% endif %}
+                </p>
+            
+            
+                    {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_telefono1%}
+                        <p class="mb-0 mt-0 text-muted text-end"><i class="fas fa-phone"></i> {{ objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_telefono1 }}</p>
+                    {% endif %}
+                    
+                    {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_email%}
+                        <p class="mb-0 text-end">{{ objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_email }}</p>
+                    {% endif %}
+                          
+              
+            </div>
+    
+    
+           
+            
+            
+            
+    
+    <!------------------- DIRIGIDO A ---------------------->
+
+            <div class="row">
+                <div class="col-12">
+    
+                    <h3 >Liquidación de Arrendamiento</h3>
+
+                    <input type="hidden" name="tipo_liquidacion" value="ALQUILER">
+
+                    <div class="col-12" style="margin-left: 20px;">
+                        <p><span class="fw-bold ps-2"><em>Detalle a abonar correspondiente al período:</em></span>&nbsp;<span style="color:#5d9fc5 ;">{{ fecha_siguiente|date:"F Y" }}</span></p>
+                    </div>
+                </div>
+            
+    
+    
+                
+                <div class="col-xl-4 text-left mt-2 mb-0">
+                    <ul class="list-unstyled ">
+                        {% for cliente in objeto.fk_Propiedadcontratoalquiler_Clientes.all %}
+                        <li class="text-muted">
+                            <span style="color:#5d9fc5 ;">
+                                {% if cliente.cl_apellido1 %}
+                                {{ cliente.cl_apellido1 }}
+                                <input type="hidden" name="liquidacion_clientes[]" value="{{ cliente.cl_apellido1 }}">
+                            {% endif %}
+                            
+                            {% if cliente.cl_apellido2 %}
+                                {{ cliente.cl_apellido2 }}
+                                <input type="hidden" name="clientes[]" value="{{ cliente.cl_apellido2 }}">
+                            {% endif %}
+                            
+                            {% if cliente.cl_nombre1 %}
+                                {{ cliente.cl_nombre1 }}
+                                <input type="hidden" name="clientes[]" value="{{ cliente.cl_nombre1 }}">
+                            {% endif %}
+                            
+                            {% if cliente.cl_nombre2 %}
+                                {{ cliente.cl_nombre2 }}
+                                <input type="hidden" name="clientes[]" value="{{ cliente.cl_nombre2 }}">
+                            {% endif %}
+                            
+                            {% if cliente.cl_razon_social %}
+                                {{ cliente.cl_razon_social }}
+                                <input type="hidden" name="clientes[]" value="{{ cliente.cl_razon_social }}">
+                            {% endif %}
+                            </span>
+                        </li>
+    
+                        {% endfor %}
+    
+                        <li class="text-muted">
+                            {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.prop_calle %}
+                                {{ objeto.fk_Propiedadcontratoalquiler_Propiedades.prop_calle }}
+                            {% endif %}
+                            {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.prop_numero %}
+                                {{ objeto.fk_Propiedadcontratoalquiler_Propiedades.prop_numero}}
+                             {% endif %} -
+                            {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.prop_piso %}
+                                {{ objeto.fk_Propiedadcontratoalquiler_Propiedades.prop_piso }}
+                            {% endif %}
+                            {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.prop_departamento %}
+                                {{ objeto.fk_Propiedadcontratoalquiler_Propiedades.prop_departamento }}
+                            {% endif %}-
+                        </li>
+    
+                        <li class="text-muted">
+    
+                            ({% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Poblaciones.codigo_postal %}
+                                {{ objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Poblaciones.codigo_postal }}
+                            {% endif %})                        
+                            {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Poblaciones.poblacion_descripcion %}
+                                {{ objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Poblaciones.poblacion_descripcion }}
+                            {% endif %}
+                        </li>
+    
+                    </ul>
+                </div>
+    
+            </div>
+    
+  <!------------------- TABLA ---------------------->     
+  
+    <div class="row my-2 mx-1 justify-content-center">
+        <div style="margin-left: 20px; margin-right: 20px;">
+          
+                
+          
+               
+          <button class="boton-agregar" onclick="agregarFila('{{ objeto.id_propiedad_contrato_alquiler }}')">+</button>
+          
+                 
+                      <table>
+                        <thead>
+                          <tr>
+                            <th scope="col" style="width: 50px">#</th>
+                            <th scope="col">Concepto</th>
+                            <th scope="col">Monto</th>
+                            <th scope="col">IVA</th>
+                            <th scope="col">IRPF</th>
+                            <th scope="col">Debe</th>
+                          </tr>
+                        </thead>
+
+                        <tbody id="tabla-body-{{ objeto.id_propiedad_contrato_alquiler }}">
+
+        <!-- ASOCIO EL CALCULO  DE IVA O IRPF SI CORRESPONDE A: custom_tags.py-->  
+
+                        <tr id="fila-1" class="primera-fila">
+                            <th scope="row">1</th>
+                            <td>Renta</td>
+                            <td class="monto-1">
+                              {% if objeto.propiedadcontratoaumentos_set.exists %}
+                                {% for aumento in objeto.propiedadcontratoaumentos_set.all %}
+                                  {{ aumento.aumentos_mensual_actualizado }}
+                                {% endfor %}
+                              {% else %}
+                              0.00
+                              {% endif %}
+                            </td>
+
+                            <td class="monto-2">
+                              {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Tipoprop.tipo_prop_descripcion|tipo_prop_descripcion_valido %}
+                              {{ objeto|calcular_valor|default:"0.00" }}
+                              {% else %}
+                              0.00
+                              {% endif %}
+                            </td> 
+                            
+
+                        </td>
+                            <td class="monto-3">
+                              {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Tipoprop.tipo_prop_descripcion|tipo_prop_descripcion_valido %}
+                              {{ objeto|calcular_valor2|default:"0.00" }}
+                              {% else %}
+                              0.00
+                              {% endif %}
+                          </td>
+                            </td>
+
+                            <td class="suma-celda"></td>
+                            
+
+                        </tr>
+
+
+                        <tr id="fila-2" class="segunda-fila">
+                          <th scope="row">2</th>
+                          <td>Deuda</td>
+                          <td class="monto-4">
+                            {% if objeto.deudacontratoalquiler_set.exists %}
+                              {% for deuda in objeto.deudacontratoalquiler_set.all %}
+                                {% for cancelacion in deuda.cancelaciones.all %}
+                                  {{ cancelacion.deudapendiente }}
+                                {% endfor %}
+                              {% endfor %}
+                            {% else %}
+                              0.00
+                            {% endif %}
+                          </td>
+                        
+                          <td class="monto-5">
+                            {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Tipoprop.tipo_prop_descripcion|tipo_prop_descripcion_valido %}
+                              {{ objeto|calcular_valor|default:"0.00" }}
+                            {% else %}
+                              0.00
+                            {% endif %}
+                          </td>
+                        
+                          <td class="monto-6">
+                            {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Tipoprop.tipo_prop_descripcion|tipo_prop_descripcion_valido %}
+                              {{ objeto|calcular_valor2|default:"0.00" }}
+                            {% else %}
+                              0.00
+                            {% endif %}
+                          </td>
+                        
+                          <td class="suma-celda"></td>
+                        </tr>
+
+                     
+                          {% for tipo_deduccion in lista_tipos_deduccion %}
+                          {% if tipo_deduccion.propiedad_id == objeto.id_propiedad_contrato_alquiler %}
+                            {% for descripcion in tipo_deduccion.descripciones %}
+                                <tr>
+                                  <td>{{ forloop.counter0|add:3 }}</td>
+                                  <td>{{ descripcion }}</td>
+                                  <td><input type="text" class="editable-input input-suma" oninput="calcularSuma(this)"></td>
+                                  <td><input type="text" class="editable-input input-suma" oninput="calcularSuma(this)"></td>
+                                  <td><input type="text" class="editable-input input-suma" oninput="calcularSuma(this)"></td>
+                                  <td class="suma-celda" data-valor=""></td>
+                                  
+                                </tr>
+                              {% endfor %}
+
+                              
+                            {% endif %}
+                          {% endfor %}
+
+                         </tbody>
+
+
+
+                         </table>
+
+
+
+              </div>        
+                      
+              </div>
+
+              
+              <div class="col-xl-3 text-center">
+                <button style="border: none;display: block; margin: 0 auto; background-color: #5d9fc5; color: white; border: none; padding: 10px 20px; border-radius: 5px;" onclick="calcularSuma('{{ objeto.id_propiedad_contrato_alquiler }}')">Sumar</button>
+              </div>                      
+
+        <div class="col-xl-3" style="margin-right: 50px; margin-bottom: 30px; ">
+                
+          <p id="resultado-total-{{ objeto.id_propiedad_contrato_alquiler }}" style="color: #160376; font-weight: bold; font-size: 24px; font-style: italic; margin-right: 30px;">Total a pagar: 0</p>
+                 
+        </div>
+              
+              
+    
+    <div class="row">
+
+      <hr> <!------------------- LÍNEA ----------------------> <br>
+
+
+      <div class="row">
+        <div class="col-xl-10">
+          <p class="fw-bold ps-2">IMPORTANTE: <em>Recuerde informar sus pagos enviando el comprobante de transferencia por mail o WhatsApp. Los pagos son del 01 al 10 de cada mes, sin excepción</em></p>
+        </div>
+      
+        <div class="col-xl-2 text-end">
+          <button type="button" class="btn btn-primary text-capitalize btn-block" style="background-color:#c22626; margin-right: 40px; border: none; height: 50px; width: 200px;">GUARDAR</button>
+        </div>
+      </div>
+      
+      
+      <hr> <!------------------- LÍNEA ----------------------> <br><br><br>
+
+      <br><h1></h1><br>
+    
+    </div>
+    
+    
+
+    
+    {% endfor %}
+    
+</div>
+     <!--scripts que no funcionan en main.js , para calcular debe de fila 1 y 2-->
+                        <script>
+                          function calcularSuma(input) {
+                            var fila = input.closest('tr');
+                            var monto1 = parseFloat(fila.querySelector('.monto-1').innerText);
+                            var monto2 = parseFloat(fila.querySelector('.monto-2').innerText);
+                            var monto3 = parseFloat(fila.querySelector('.monto-3').innerText);
+                            
+                            // Verificar si los valores son numéricos
+                            if (isNaN(monto1)) monto1 = 0;
+                            if (isNaN(monto2)) monto2 = 0;
+                            if (isNaN(monto3)) monto3 = 0;
+                            
+                            var suma = monto1 + monto2 + monto3;
+                            fila.querySelector('.suma-celda').innerText = suma.toFixed(2);
+                          }
+                          
+                          // Calcular la suma en la primera fila de cada iteración
+                          var filas = document.querySelectorAll('.primera-fila');
+                          filas.forEach(function(fila) {
+                            calcularSuma(fila);
+                          });
+                        </script>
+
+
+                        <script>
+                          function calcularSuma(input) {
+                            var fila = input.closest('tr');
+                            var monto1 = parseFloat(fila.querySelector('.monto-4').innerText);
+                            var monto2 = parseFloat(fila.querySelector('.monto-5').innerText);
+                            var monto3 = parseFloat(fila.querySelector('.monto-6').innerText);
+                            
+                            // Verificar si los valores son numéricos
+                            if (isNaN(monto1)) monto1 = 0;
+                            if (isNaN(monto2)) monto2 = 0;
+                            if (isNaN(monto3)) monto3 = 0;
+                            
+                            var suma = monto1 + monto2 + monto3;
+                            fila.querySelector('.suma-celda').innerText = suma.toFixed(2);
+                          }
+                          
+                          // Calcular la suma en la primera fila de cada iteración
+                          var filas = document.querySelectorAll('.segunda-fila');
+                          filas.forEach(function(fila) {
+                            calcularSuma(fila);
+                          });
+                        </script>
+  
+
+
+
+   
+{% endblock %}

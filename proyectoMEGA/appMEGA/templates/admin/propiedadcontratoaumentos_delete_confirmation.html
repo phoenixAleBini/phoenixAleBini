@@ -1,0 +1,13 @@
+{% extends 'admin/delete_confirmation.html' %}
+
+{% block content %}
+    {{ block.super }}
+
+    {% if extra_message %}
+    <div class="extra-message">
+        {{ extra_message }}
+    </div>
+    {% endif %}
+{% endblock %}
+
+<!-- para mostrar la confirmación de eliminación de una instancia de la clase Propiedadcontratoaumentos. Es la vista que aparece cuando se intenta eliminar una instancia. -->

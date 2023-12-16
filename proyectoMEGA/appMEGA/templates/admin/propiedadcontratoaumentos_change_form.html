@@ -1,0 +1,14 @@
+{% extends 'admin/change_form.html' %}
+{% load static %}
+
+{% block content %}
+    {{ block.super }}
+
+    {% if warning_message %}
+    <div class="warning-message" style="background-color: yellow; padding: 40px; margin: 20px 0; border: 2px solid #e0e1e2; border-radius: 4px; font-weight: bold; font-size: 18px; line-height: 1.7; color: #0a6095; text-align: justify;">
+        {{ warning_message }}
+    </div>
+    {% endif %}
+
+    
+{% endblock %}

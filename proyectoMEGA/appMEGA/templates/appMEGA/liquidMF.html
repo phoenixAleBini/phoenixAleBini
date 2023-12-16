@@ -1,0 +1,907 @@
+{% extends 'appMEGA/base-indexadmin.html' %}
+
+{% load static %}  <!-- Cargar etiquetas para archivos estáticos -->
+{% load tz %}     <!-- Cargar etiquetas para manejar zonas horarias -->
+{% load custom_tags %}   <!-- Cargar tus etiquetas personalizadas (si las tienes) -->
+{% load custom_filters %}<!-- para comparar fechas-->
+
+{% block content %}
+
+<!------------- EMPRESA DUEÑA DE LA PROPIEDAD QUE SE ADMINISTRA (derecha)------------>     
+
+<div style="max-width: 1200px; margin: 0 auto;">
+  <div class="row justify-content-end">
+
+    {% for objeto in object %}
+
+      <!-- Abrir el formulario asociándolo a la vista que manejará la acción de guardar los datos del formulario -->
+          
+      <form id="liquidacionesMegaAlquileres-{{ objeto.id_propiedad_contrato_alquiler }}" method="POST" action="{% url 'save_Mega_liq_alq' %}" data-url="{% url 'save_Mega_liq_alq' %}">
+          
+        {% csrf_token %}
+
+
+
+  <!-- Agregar el campo oculto para el ID de Propiedadcontratoalquiler -->
+
+  <input type="hidden" name="propiedadcontratoalquiler_id" value="{{ objeto.id_propiedad_contrato_alquiler }}">
+  <input type="hidden" name="tipocontrato_id" value="{{ objeto.fk_Propiedadcontratoalquiler_Tipocontrato_id }}">
+  
+  {% with objeto.propiedadcontratoaumentos_set.first as propiedad_contrato_aumentos %}
+  {% if propiedad_contrato_aumentos %}
+  <input type="hidden" name="objeto_aumentos_mensual_actualizado" value="{{ propiedad_contrato_aumentos.aumentos_mensual_actualizado }}">
+  {% endif %}
+  {% endwith %}
+  
+  {% if objeto.deudacontratoalquiler_set.exists %}
+  {% for deuda in objeto.deudacontratoalquiler_set.all %}
+    {% for cancelacion in deuda.cancelaciones.all %}
+      <input type="hidden" name="objeto_cancelacion_deuda_pendiente" value="{{ cancelacion.deudapendiente }}">
+    {% empty %}
+      <input type="hidden" name="cancelacion_deudapendiente" value="0">
+    {% endfor %}
+  {% endfor %}
+    {% else %}
+  <input type="hidden" name="cancelacion_deudapendiente" value="0">
+  {% endif %}
+
+
+
+
+
+
+    <!------- LOGO -(si se agrega otra empresa, agregar elif e imagen y logoi asociado desde el id_empresa)-------->  
+    
+            <div class="container">
+                <div class="col-md-12">
+                    <div class="text-center">
+                        <div class="mt-4">
+                            
+                            {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.id_empresas == 1 %}
+                                <img src="{% static 'appMEGA/img/logo1.png' %}" alt="Logo 1">
+    
+
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+    <!------------- EMPRESA ------------>     
+    
+          
+            <div class="ms-auto text-right" style="margin-right: 50px; max-width: 600px;">
+
+            
+                <p class="mt-0 mb-0 text-end">
+
+            <input type="hidden" name="contrato_id" value="{{ objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.id_contrato }}">
+    
+                    {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_apellido1 %}
+                        {{ objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_apellido1 }}
+                    {% endif %}
+                                    
+                    {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_apellido2 %}
+                        {{ objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_apellido2 }}
+                   {% endif %}
+                    
+                    {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_empresa_nombre1%}
+                        {{ objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_empresa_nombre1 }}
+                  {% endif %}
+                    
+                    {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_empresa_nombre2%}
+                        {{ objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_empresa_nombre2 }}
+                    {% endif %}
+                    
+                    {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_razon_social %}
+                        {{ objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_razon_social }}
+                   {% endif %}
+                </p>
+            
+            
+                    {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_telefono1%}
+                        <p class="mb-0 mt-0 text-muted text-end"><i class="fas fa-phone"></i> {{ objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_telefono1 }}</p>
+                    {% endif %}
+                    
+                    {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_email%}
+                        <p class="mb-0 text-end">{{ objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Contratos.fk_Contratos_Empresas.empresa_email }}</p>
+                    {% endif %}
+                          
+              
+            </div>
+    
+    
+           
+            
+            
+            
+    
+    <!------------------- DIRIGIDO A ---------------------->
+
+            <div class="row">
+                <div class="col-12" style="margin-left: 70px;">
+    
+                    <h3 >Liquidación de Arrendamiento</h3>
+
+                    <div class="col-12" style="margin-left: 70px;">
+                        <p><span class="fw-bold ps-2"><em>Detalle a abonar correspondiente al período:</em></span>&nbsp;<span style="color:#5d9fc5 ;">{{ fecha_siguiente|date:"F Y" }}</span></p>
+                    </div>
+
+                    <input type="hidden" name="fecha_actual" value="{{ fecha_siguiente|date:"F Y" }}"">       
+                  </div>
+            
+    
+    
+                
+                <div class="col-xl-4 text-left mt-2 mb-0" style="margin-left: 70px;">
+                    <ul class="list-unstyled ">
+                        {% for cliente in objeto.fk_Propiedadcontratoalquiler_Clientes.all %}
+                        <li class="text-muted">
+                            <span style="color:#5d9fc5 ;">
+                                {% if cliente.cl_apellido1 %}
+                                {{ cliente.cl_apellido1 }}
+                           {% endif %}
+                            
+                            {% if cliente.cl_apellido2 %}
+                                {{ cliente.cl_apellido2 }}
+                            {% endif %}
+                            
+                            {% if cliente.cl_nombre1 %}
+                                {{ cliente.cl_nombre1 }}
+                            {% endif %}
+                            
+                            {% if cliente.cl_nombre2 %}
+                                {{ cliente.cl_nombre2 }}
+                            {% endif %}
+                            
+                            {% if cliente.cl_razon_social %}
+                                {{ cliente.cl_razon_social }}
+                            {% endif %}
+                            </span>
+                        </li>
+    
+                        {% endfor %}
+    
+                        <li class="text-muted">
+                            {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.prop_calle %}
+                                {{ objeto.fk_Propiedadcontratoalquiler_Propiedades.prop_calle }}
+                            {% endif %}
+                            {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.prop_numero %}
+                                {{ objeto.fk_Propiedadcontratoalquiler_Propiedades.prop_numero}}
+                             {% endif %} -
+                            {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.prop_piso %}
+                                {{ objeto.fk_Propiedadcontratoalquiler_Propiedades.prop_piso }}
+                            {% endif %}
+                            {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.prop_departamento %}
+                                {{ objeto.fk_Propiedadcontratoalquiler_Propiedades.prop_departamento }}
+                            {% endif %}-
+                        </li>
+    
+                        <li class="text-muted">
+    
+                            ({% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Poblaciones.codigo_postal %}
+                                {{ objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Poblaciones.codigo_postal }}
+                            {% endif %})                        
+                            {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Poblaciones.poblacion_descripcion %}
+                                {{ objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Poblaciones.poblacion_descripcion }}
+                            {% endif %}
+                        </li>
+    
+                    </ul>
+                </div>
+    
+            </div>
+    
+  <!------------------- TABLA ---------------------->     
+  
+    <div class="row my-2 mx-1 justify-content-center">
+        <div style="margin-left: 20px; margin-right: 20px;">
+        
+          <button class="boton-agregar" type="button" data-tabla-id="{{ objeto.id_propiedad_contrato_alquiler }}" data-contador="{{ forloop.counter }}" onclick="agregarFila(this)">+</button>
+              
+                      <table>
+                        <thead>
+                          <tr>
+                            <th scope="col" style="width: 50px"></th>
+                            <th scope="col">Concepto</th>
+                            <th scope="col">Monto</th>
+                            <th scope="col">IVA</th>
+                            <th scope="col">IRPF</th>
+                            <th scope="col">Debe</th>
+                          </tr>
+                        </thead>
+
+                        <tbody id="tabla-body-{{ objeto.id_propiedad_contrato_alquiler }}" data-tabla-id="{{ objeto.id_propiedad_contrato_alquiler }}">    
+
+                         <!--  le damos al cuerpo de la tabla un id unico para cada iteracion en el bucle -->
+ 
+ 
+            <!-- ASOCIO EL CALCULO  DE IVA O IRPF SI CORRESPONDE A: custom_tags.py-->  
+
+            <!-- RENTA-->
+
+                        <tr id="fila-1" class="primera-fila">
+                            <td></td>
+                            <td class="concepto" data-objeto-id="{{ objeto.id }}">Renta</td>
+                            <td class="monto-1" id="rentabase">
+                              {% if objeto.propiedadcontratoaumentos_set.exists %}
+                                {% for aumento in objeto.propiedadcontratoaumentos_set.all %}
+                                  {{ aumento.aumentos_mensual_actualizado }}
+                                {% endfor %}
+                              {% else %}
+                              0.00
+                              {% endif %}
+                            </td>
+
+                            <td class="monto-2">
+                              {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Tipoprop.tipo_prop_descripcion|tipo_prop_descripcion_valido %}
+                              {{ objeto|calcular_valor|default:"0.00" }}
+                              {% else %}
+                              0.00
+                              {% endif %}
+                            </td> 
+                        </td>
+                            <td class="monto-3">
+                              {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Tipoprop.tipo_prop_descripcion|tipo_prop_descripcion_valido %}
+                              {{ objeto|calcular_valor2|default:"0.00" }}
+                              {% else %}
+                              0.00
+                              {% endif %}
+                          </td>
+                            </td>
+
+                            <td class="suma-celda" data-valor="0"></td>
+                        </tr>
+
+          <!-- FIANZA ORIGINAL-->
+          <!--   
+          
+          {% now "Y-m" as fecha_actual %}
+                    
+                                      
+                      {% if objeto.propiedad_contrato_alquiler_fecha_inicio|date:"Y-m" == fecha_actual %}
+                     
+
+                      <tr id="fila-2" class="segunda-fila">
+                        <td></td>
+                        <td class="concepto" data-objeto-id="{{ objeto.id }}">Fianza</td>
+                        <td class="monto-1" id="fianza">
+                          {% if objeto.propiedadcontratoaumentos_set.exists %}
+                          {% for aumento in objeto.propiedadcontratoaumentos_set.all %}
+                            {{ aumento.aumentos_fianza_actualizada }}
+                          {% endfor %}
+                        {% else %}
+                        0.00
+                        {% endif %}
+                        </td>
+                          <td class="monto-2">
+                            {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Tipoprop.tipo_prop_descripcion|tipo_prop_descripcion_valido %}
+                            {{ objeto|calcular_valor_fianza|default:"0.00" }}
+                            {% else %}
+                            0.00
+                            {% endif %}
+                          </td> 
+                      
+                          <td class="monto-3">
+                            {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Tipoprop.tipo_prop_descripcion|tipo_prop_descripcion_valido %}
+                            {{ objeto|calcular_valor_fianza2|default:"0.00" }}
+                            {% else %}
+                            0.00
+                            {% endif %}
+                        </td>
+                          
+
+                        <td class="suma-celda" data-valor="0"></td>
+                      </tr>
+
+                {% endif %}
+              -->
+
+              <!--DIFERENCIA FIANZA -->
+                {% for aumento in objeto.propiedadcontratoaumentos_set.all %}
+                {% if aumento.diferencia_fianza > 0 and mes_siguiente == objeto.propiedad_contrato_alquiler_fecha_inicio.month %}
+
+                                    <tr id="fila-3" class="tercera-fila">
+                                      <td></td>
+                                      <td class="concepto" data-objeto-id="{{ objeto.id }}">Diferencia Fianza</td>
+                                      <td class="monto-1" id="diffianza">
+                                        {{ aumento.diferencia_fianza }}
+                                      </td>
+                                      <td class="monto-2">
+                                        {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Tipoprop.tipo_prop_descripcion|tipo_prop_descripcion_valido %}
+                                          {{ objeto|calcular_valor_diffianza|default:"0.00" }}
+                                        {% else %}
+                                          0.00
+                                        {% endif %}
+                                      </td> 
+                                      <td class="monto-3">
+                                        {% if objeto.fk_Propiedadcontratoalquiler_Propiedades.fk_Propiedades_Tipoprop.tipo_prop_descripcion|tipo_prop_descripcion_valido %}
+                                          {{ objeto|calcular_valor_diffianza2|default:"0.00" }}
+                                        {% else %}
+                                          0.00
+                                        {% endif %}
+                                      </td>
+                                      <td class="suma-celda" data-valor="0"></td>
+                                    </tr>
+                                  {% endif %}
+                                {% endfor %}
+                          
+            
+                
+              <!-- DEUDA PENDIENTE-->    
+         
+    
+            {% for obj in objetos_propiedad %}
+              {% if obj.propiedad_id == objeto.id_propiedad_contrato_alquiler and obj.deuda_pendiente_mas_reciente  > 0 %}
+
+              <tr id="fila-4" class="cuarta-fila">
+                <td></td>
+                <td class="concepto" data-objeto-id="{{ objeto.objeto.id }}">Deuda Pendiente</td>
+                <!-- Agregar el resto de las celdas de la fila si es necesario -->
+                <td class="monto-12" id="diffianza">
+                {{ obj.deuda_pendiente_mas_reciente }}
+              </td>
+              <td class="monto-13">
+                  0.00
+              </td> 
+              <td class="monto-14">
+                  0.00
+              </td>
+              <td class="suma-celda" data-valor="0"></td>>
+            </tr>
+            {% endif %}
+            {% endfor %}
+
+             <!-- FILAS PLUS que pagan siempre los arrendatarios de la propiedad-->    
+                      
+                        {% for tipo_deduccion in lista_tipos_deduccion %}
+                        {% if tipo_deduccion.propiedad_id == objeto.id_propiedad_contrato_alquiler %}
+                          {% for descripcion in tipo_deduccion.descripciones %}
+                            <tr class="fila-PLUS" data-fila="fila-{{ forloop.counter }}" >
+                              <td></td>
+                              <td class="concepto" data-objeto-id="{{ objeto.id }}">{{ descripcion }}</td>
+
+                              
+                              <td class="input-suma"><input type="text" class="editable-input input-suma" data-fila="fila-{{ forloop.counter }}" name="celda3_{{ descripcion }}" oninput="calcularSumaGeneral()"></td>
+                              <td class="input-suma"><input type="text" class="editable-input input-suma" data-fila="fila-{{ forloop.counter }}" name="celda4_{{ descripcion }}" oninput="calcularSumaGeneral()"></td>
+                              <td class="input-suma"><input type="text" class="editable-input input-suma" data-fila="fila-{{ forloop.counter }}" name="celda5_{{ descripcion }}" oninput="calcularSumaGeneral()"></td>
+                              <td class="suma-celda" data-fila="fila-{{ forloop.counter }}" data-valor=""></td>
+                            </tr>
+                          {% endfor %}
+                        {% endif %}
+                        {% endfor %}
+
+
+
+          
+
+     <!-- Filas HIDDEN para agregar dinámicamente -->
+     <input type="hidden" name="celda-agregada3-{{ objeto.id_propiedad_contrato_alquiler }}" value=""> </td> <!-- Celda 3 -->
+            
+      
+          
+      
+        
+        
+  <!--------------------------------------------------------------------------------------------------->
+
+
+            </tbody>
+              </table>
+                </div>              
+              </div>
+
+              <div class="d-flex justify-content-center">
+                <div class="col-xl-3 text-center">
+                  
+                  <p id="resultado-total-{{ objeto.id_propiedad_contrato_alquiler }}" 
+                    data-parrafo="resultado-total-{{ objeto.id_propiedad_contrato_alquiler }}" 
+                    style="color: #160376; font-weight: bold; font-size: 24px; font-style: italic; margin-top: 10px;">
+                    Total a pagar: <span id="resultado-suma-{{ objeto.id_propiedad_contrato_alquiler }}"></span>
+                  </p>
+
+  
+                  
+                </div>
+              </div>
+              
+   <div class="row">
+
+      <hr> <!------------------- LÍNEA ----------------------> <br>
+
+
+      <div class="row">
+        <div class="col-xl-10">
+
+          <p class="fw-bold ps-2">IMPORTANTE: </p>
+          <p class="ps-2">- Recuerde informar sus pagos enviando el comprobante de transferencia por mail o WhatsApp. Los pagos son del 01 al 5 de cada mes, sin excepción.</p>
+          <p class="ps-2">- Tenga presente que pasado los primeros 6 meses del contrato de alquiler, toda avería que se produzca en la propiedad por uso, corre a cuenta y cargo del inquilino.</p>
+          <p class="fw-bold ps-2">UNICA CUENTA BANCARIA HABILITADA: Banco CAJAMAR -CAJA RURAL Cuenta: ES42 3058 4510 7127 2001 0486 / Beneficiario: MEGA FOREVER SL</em></p>
+
+        </div>
+
+      
+
+
+     
+      <hr> <!------------------- LÍNEA ----------------------> </hr>
+      <br><br><br>
+
+        <!-- cierre objeto.propiedad_contrato_alquiler-->
+        
+        <div class="row justify-content-end mb-10 mb-md-0">
+          <div class="col-md-6 text-right"> <!-- Utiliza la clase text-right para alinear a la derecha -->
+              <div class="btn-toolbar">
+                  <div class="btn-group me-2">
+                      <button type="submit" class="btn btn-sm btn-outline-secondary boton-guardar" data-tabla-id="{{ objeto.id_propiedad_contrato_alquiler }}" data-contador="{{ forloop.counter }}" data-clave="{{ objeto.id_propiedad_contrato_alquiler }}" data-url="{% url 'save_Mega_liq_alq' %}"  id="boton-guardar">Guardar en BBDD</button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary crear-pdf-btn"
+                        data-url="{% url 'generar_pdf' %}?propiedadcontratoalquiler_id={{ objeto.id_propiedad_contrato_alquiler }}&fecha_siguiente={{ fecha_siguiente|date:'F Y' }}&total_a_pagar={{ valor_total_pagar }}"
+                        data-propiedadcontratoalquiler-id="{{ objeto.id_propiedad_contrato_alquiler }}"
+                        data-total-pagar="{{ valor_total_pagar }}"
+                        data-fecha="{{ fecha_siguiente|date:'F Y' }}">
+                        Crear PDF
+                     </button>
+
+
+
+                  </div>
+                  <button type="button" class="btn btn-sm btn-outline-secondary"   id="enviar-email-btn">Enviar e-mail</button>
+              </div>
+          </div>
+      </div>
+      
+      <!-- Campo oculto para almacenar el valor actualizado  total de gastos  pasarlo a la view para generaR_PDF-->
+      <input type="hidden" name="pepito-{{ objeto.id_propiedad_contrato_alquiler }}" id="pepito-{{ objeto.id_propiedad_contrato_alquiler }}" >
+
+
+
+
+<p> <br><br><br></p>
+
+      </div>
+   
+
+  
+
+    </form>
+    {% endfor %}
+    
+  </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+  var datosFilas = [];
+  var totalGeneral = 0;
+  var filasAguardar = []; // Declarar filasAguardar como una variable global
+
+  //********* LA PAGINA SE CARGA CON VALORES DE RENTA, FIANZA, ORIGINAL, DIFERENCIA FIANZA Y DEUDA PENDIENTE CARGADOS
+  //********* CON LA CELDA SUMA-CELDA CALCULADA Y EL TOTAL A PAGAR PREVIO CALCULADO
+  //********* Y CON LOS INPUTS EN CELDAS 3, 4 Y 5  DE FILAS PLUS  SE ACTUALIZAN SUMA-CELDA  y TOTAL A PAGAR
+  
+  function calcularSuma(fila) {
+      var celdasMonto = fila.querySelectorAll('td:nth-child(2), td:nth-child(3), td:nth-child(4), td:nth-child(5)');
+      var suma = 0;
+  
+      celdasMonto.forEach(function(celda) {
+          if (celda.classList.contains('input-suma')) {
+              var valor = parseFloat(celda.querySelector('input').value) || 0;
+              suma += valor;
+          } else {
+              var monto = parseFloat(celda.innerText);
+              if (!isNaN(monto)) {
+                  suma += monto;
+              }
+          }
+      });
+  
+      var sumaCelda = fila.querySelector('.suma-celda');
+      sumaCelda.innerText = suma.toFixed(2);
+  }
+  
+  function calcularSumaTabla(tabla) {
+      var filas = tabla.querySelectorAll('tr');
+      var sumaTotal = 0;
+  
+      filas.forEach(function(fila) {
+          calcularSuma(fila);
+          var valorCelda6 = parseFloat(fila.querySelector('.suma-celda').innerText) || 0;
+          sumaTotal += valorCelda6;
+      });
+  
+      var tablaId = tabla.getAttribute('data-tabla-id');
+
+    
+
+      var totalPagar = document.querySelector('#resultado-suma-' + tablaId);
+      totalPagar.innerText = sumaTotal.toFixed(2);
+
+
+     // Aquí actualizas la variable totalGeneral
+      totalGeneral += sumaTotal;
+
+  }
+  
+  document.addEventListener('DOMContentLoaded', function() {
+      var tablas = document.querySelectorAll('tbody[data-tabla-id]');
+  
+      tablas.forEach(function(tabla) {
+          calcularSumaTabla(tabla);
+      });
+  
+      var filasSegundoGrupo = document.querySelectorAll('tr.fila-PLUS[data-fila]');
+      filasSegundoGrupo.forEach(function(fila) {
+          var inputCeldas = fila.querySelectorAll('.input-suma input');
+          
+          inputCeldas.forEach(function(input) {
+              input.addEventListener('input', function() {
+                  calcularSumaTabla(fila.closest('tbody[data-tabla-id]'));
+              });
+          });
+      });
+  
+  
+  
+      // Iterar a través de todas las tablas y calcular la suma para cada una
+      tablas.forEach(function(tabla) {
+          calcularSumaTabla(tabla);
+      });
+  
+  
+  
+  
+  <!-- agrego una nueva fila a la tabla con el botón + Y CALCULO LA SUMA-->
+    
+  
+  
+  //************* SEGUNDA PARTE DEL SCRIPT
+  
+  //************* FUNCION AGREGA TERCER GRUO DE FILAS (EL USUARIO)   ***************
+  //************* INCLUYE  OPCION LISTA DESPLEGABLE PRESELECCIONADA  ***************
+  
+  
+  
+  //********** FUNCION SUMA CELDA 6 TERCER GRUPO**********
+
+ 
+  function calcularSumaTercerGrupo(fila, tablaId) {
+    // Obtenemos el total anterior para la tabla específica
+    var totalAnterior = parseFloat(document.querySelector('#resultado-suma-' + tablaId).innerText) || 0;
+
+    // Obtenemos el valor anterior de la celda 6 de la fila
+    var valorAnteriorCelda6 = parseFloat(fila.querySelector('td:nth-child(6)').getAttribute('data-valor-anterior')) || 0;
+
+    // Obtenemos los valores de las celdas 3, 4 y 5 de la fila
+    var valorCelda3 = parseFloat(fila.querySelector('td:nth-child(3) input').value) || 0;
+    var valorCelda4 = parseFloat(fila.querySelector('td:nth-child(4) input').value) || 0;
+    var valorCelda5 = parseFloat(fila.querySelector('td:nth-child(5) input').value) || 0;
+
+    // Calculamos la suma de las celdas 3, 4 y 5 de la fila
+    var suma = valorCelda3 + valorCelda4 + valorCelda5;
+
+    var listaDesplegable = fila.querySelector('select[name="concepto"]');
+    var opcionSeleccionada = listaDesplegable.value;  
+
+
+    // Actualizamos el valor anterior de la celda 6 de la fila
+    fila.querySelector('td:nth-child(6)').setAttribute('data-valor-anterior', suma);
+
+    var sumaCelda2 = fila.querySelector('.suma-celda2');
+    sumaCelda2.innerText = suma.toFixed(2);
+
+    // Calculamos el nuevo total para la tabla específica
+    var nuevoTotal = totalAnterior - valorAnteriorCelda6 + suma;
+
+    // Actualizamos el elemento #resultado-suma- solo para la tabla específica
+    var totalPagar = document.querySelector('#resultado-suma-' + tablaId);
+    totalPagar.innerText = nuevoTotal.toFixed(2);
+
+
+//********************
+
+
+var valorCelda3 = parseFloat(fila.querySelector('td:nth-child(3) input').value) || 0;
+document.querySelector('[name="celda-agregada3-' + tablaId + '"]').value = valorCelda3;
+
+
+
+    
+//var tablaId = tablaId; // Asegúrate de obtener el ID correcto para la tabla actual
+//var valorCelda3 = parseFloat(fila.querySelector('.tabla-' + tablaId + ' td:nth-child(3) input').value) || 0;
+//document.querySelector('#valorCelda3-1-' + tablaId).value = valorCelda3;
+
+
+
+console.log('el valor al final del script es', tablaId)
+
+
+    
+//**************************
+
+ // Obtén todas las filas con la clase "agregada-oculta"
+//var filas = document.querySelectorAll('.agregada-oculta');
+
+//for (var i = 0; i < 5; i++) {
+    // Dentro de este bucle, puedes recopilar los valores de cada fila
+//    var filaId = fila.id; // Obtiene el ID único de la fila
+//    var opcionSeleccionada = fila.querySelector('select[name="concepto"]').value;
+//    var valorCelda3 = parseFloat(fila.querySelector('input[name="valorCelda3"]').value) || 0;
+//    var valorCelda4 = parseFloat(fila.querySelector('input[name="valorCelda4"]').value) || 0;
+//    var valorCelda5 = parseFloat(fila.querySelector('input[name="valorCelda5"]').value) || 0;
+
+    // Actualiza los campos ocultos correspondientes
+ //   document.querySelector(`#${filaId} select[name="concepto"]`).value = opcionSeleccionada;
+ //   document.querySelector(`#${filaId} input[name="valorCelda3"]`).value = valorCelda3;
+//    document.querySelector(`#${filaId} input[name="valorCelda4"]`).value = valorCelda4;
+ //   document.querySelector(`#${filaId} input[name="valorCelda5"]`).value = valorCelda5;
+//}               
+
+}
+
+var contadorFilasTercerGrupo = 1; // Inicializa el contador de filas 
+  
+function agregarFilaTercerGrupo(boton) {
+      var contador = boton.dataset.contador;
+      var tablaId = boton.getAttribute('data-tabla-id'); // Usa getAttribute para obtener el valor
+      var tablaBody = document.getElementById('tabla-body-' + tablaId);
+
+
+
+      console.log('el tablaID en la primer parte es',tablaId )
+  
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '{% url "save_Mega_liq_alq" %}', true);
+      xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+              var respuesta = JSON.parse(xhr.responseText);
+              var opciones = respuesta.tipo_deduccion_descripcion;
+  
+              
+              var newRow = document.createElement('tr');//creo la fila
+              var filaId = 'FBOTON-TERCER-' + contadorFilasTercerGrupo++; // Usa un contador separado para el tercer grupo
+              newRow.setAttribute('data-fila-id', filaId);
+              newRow.classList.add('fila-tercer-grupo'); // Agrega una clase para identificar las filas del tercer grupo
+  
+              var filaData = {
+                  filaId: filaId,
+                  opcion: '',
+                  valor3: 0,
+                  valor4: 0,
+                  valor5: 0,
+              };
+  
+              newRow.innerHTML = `
+                  <td></td>
+                  <td class="concepto" data-objeto-id="${tablaId}">
+                      <select class="select2" name="concepto">
+                          ${opciones
+                              .map((opcion) => `<option value="${opcion}">${opcion}</option>`)
+                              .join('')}
+                      </select>
+                      <input type="hidden" id="opcion-${tablaId}" name="opcion" value="${opciones[0]}">
+                  </td>
+              `;
+  
+              
+              for (var i = 2; i <= 4; i++) {
+                  var celda = document.createElement('td');
+                  var entrada = document.createElement('input');
+                  entrada.type = 'number';
+                  entrada.classList.add('editable-input', 'input-suma');
+
+                  // Crea un ID único basado en el valor de tablaId y el índice (i)
+                  var idCelda = `celda-${tablaId}-${i}`;
+                  entrada.id = idCelda;
+
+
+                  entrada.addEventListener('input', function () {
+
+
+                    calcularSumaTercerGrupo(newRow, tablaId); // Calcular la suma para el tercer grupo
+                                     
+                  });
+
+ 
+
+                  celda.appendChild(entrada);
+                  newRow.appendChild(celda);
+              }
+  
+
+              var celdaSuma2 = document.createElement('td');
+              celdaSuma2.classList.add('suma-celda2');
+              celdaSuma2.textContent = 0;
+              newRow.appendChild(celdaSuma2);
+
+      
+
+  
+              tablaBody.appendChild(newRow);
+  
+                  // ---------Dentro de tu función agregarFila pongo opcion predeterminada ---------
+  
+            var listaDesplegable = newRow.querySelector('.select2');
+            
+
+
+  
+            // Agrega la opción predeterminada "Seleccione una opción" con el atributo "selected"
+            var opcionPredeterminada = new Option('Seleccione una opción', '');
+            opcionPredeterminada.setAttribute('selected', 'selected');
+            listaDesplegable.appendChild(opcionPredeterminada);
+
+  
+            // Luego, puedes agregar las opciones desde tu respuesta JSON
+            opciones.forEach(function (opcion) {
+              var option = new Option(opcion, opcion);
+              listaDesplegable.appendChild(option);
+                                                });
+            //-------------------------------------------------------------------------------------
+  
+            $(listaDesplegable).select2();
+  
+            $(listaDesplegable).on('change', function () {
+              var opcionSeleccionada = $(this).val();
+
+
+ 
+    
+              var filaIndex = datosFilas.findIndex(function (f) {
+                return f.filaId === filaId;
+                                                                });
+                if (filaIndex !== -1) {
+                datosFilas[filaIndex]['opcion'] = opcionSeleccionada;  
+                
+                                    }                      
+                                                          });
+
+                }
+              };
+              xhr.send();
+            }
+  
+      var botonesAgregar = document.querySelectorAll('.boton-agregar');
+      botonesAgregar.forEach(function(boton) {
+        boton.addEventListener('click', function() {
+          agregarFilaTercerGrupo(this);
+                                                   });
+                                             });
+    });
+  </script>
+ 
+ 
+
+
+
+
+
+
+
+
+<script>
+
+  // Función para calcular y actualizar el Total a Pagar
+// Función para calcular y actualizar el Total a Pagar por tabla
+function actualizarTotalAPagarPorTabla(tablaId) {
+  var sumaTotal = 0;
+
+  // Recorre todas las celdas con la clase "suma-celda" dentro de la tabla específica
+  $('#tabla-body-' + tablaId + ' .suma-celda').each(function() {
+    var valorCelda = parseFloat($(this).text());
+    if (!isNaN(valorCelda)) {
+      sumaTotal += valorCelda;
+    }
+  });
+
+  // Actualiza el contenido del elemento con el ID específico para esta tabla
+  $('#total-a-pagar-' + tablaId).text('Total a pagar: ' + sumaTotal.toFixed(2));
+}
+function agregarFila(boton) {
+  var contador = boton.dataset.contador;
+  var tablaId = boton.dataset.tablaId;
+  var tabla = document.querySelector('#tabla-body-' + tablaId);
+
+  // ... (código para agregar la fila)
+
+  // Calcula la suma para esta tabla después de agregar la fila
+  actualizarTotalAPagarPorTabla(tablaId);
+}
+
+
+</script> 
+
+
+
+
+
+  
+  
+
+
+<script>
+$(document).ready(function() {
+  $("#crear-pdf-btn").click(function() {
+
+    console.log("Evento clic detectado.");
+    // URL de la vista que genera el PDF
+    var pdfUrl = "/generar_pdf/";
+
+    // Crear un formulario oculto para enviar la solicitud POST
+    var form = $('<form>', {
+      'action': pdfUrl,
+      'method': 'POST',
+      'target': '_blank'  // Abre la respuesta en una nueva ventana emergente
+    });
+
+    // Agregar el formulario al cuerpo del documento
+    $(document.body).append(form);
+
+    // Enviar el formulario
+    form.submit();
+  });
+});
+</script>
+
+<!--script>
+
+//al hacer click en el boton generar_pdf, se copiara el valor del span al campo oculto (total a pagar a pepito)
+document.addEventListener('DOMContentLoaded', function() {
+  var crearPdfBtns = document.querySelectorAll('.crear-pdf-btn');
+
+  crearPdfBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var pdfUrl = btn.getAttribute('data-url');
+      var propiedadcontratoalquilerId = btn.getAttribute('data-propiedadcontratoalquiler-id');
+      var fechaSiguiente = btn.getAttribute('data-fecha');
+
+      // Agregar el valor del span como parámetro en la URL
+      pdfUrl += `?propiedadcontratoalquiler_id=${propiedadcontratoalquilerId}&fecha_siguiente=${fechaSiguiente}`;
+
+      // Abre el PDF en una nueva ventana o pestaña
+      window.open(pdfUrl, '_blank');
+    });
+  });
+});
+</script-->
+
+<script>
+//en este script traigo valores de html al script para depositarlos en la view, 
+//válido cuando la plantilla tiene más de una view  -data-... en botón, var en script, y el GET en la view-
+document.addEventListener('DOMContentLoaded', function() {
+  var crearPdfBtns = document.querySelectorAll('.crear-pdf-btn');
+
+  crearPdfBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      
+      var pdfUrl = btn.getAttribute('data-url');
+      var propiedadcontratoalquilerId = btn.getAttribute('data-propiedadcontratoalquiler-id');
+      var fechaSiguiente = btn.getAttribute('data-fecha');
+
+      // Obtener el valor del input hidden dinámico
+      var valorHiddenDinamico = $('#pepito-' + propiedadcontratoalquilerId).val();
+      console.log("Valor del input hidden:", valorHiddenDinamico);
+      console.log("Valor del input hidden:", propiedadcontratoalquilerId );
+      console.log("Valor del input hidden:", fechaSiguiente );
+    
+    // Agregar el valor del span como parámetro en la URL
+    pdfUrl += `?propiedadcontratoalquiler_id=${propiedadcontratoalquilerId}&fecha_siguiente=${fechaSiguiente}&mi_input_hidden_dinamico=${valorHiddenDinamico}`;
+
+
+    // Abre el PDF en una nueva ventana o pestaña
+    window.open(pdfUrl, '_blank');
+    });
+  });
+});
+</script>
+
+
+
+
+
+
+
+                            </div> 
+{% endblock %}
+
+
+

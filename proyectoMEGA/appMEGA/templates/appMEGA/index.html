@@ -1,0 +1,95 @@
+<!doctype html>
+{% load static %}
+
+<html lang="en" class="h-100">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+     <title>home</title>
+
+  
+
+
+  <!-- INICIAR BOOTSTRAP -->
+  <link href="{% static 'appMEGA/css/style.css' %}" rel="stylesheet">
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+
+
+  <!-- INICIAR FUENTES -->
+  <link href="{% static 'appMEGA/css/fuentes.css' %}" rel="stylesheet">
+  
+
+</head>
+
+  <body>
+
+   
+    <div class="hero-image">
+
+    
+        <div class="hero-text">
+
+
+
+
+              <h1>Business Analytic Model
+                
+                <p><br> </br> <br> </br></p>
+                
+
+              </h1>
+
+
+
+              <h2>SISTeMA INTeGRAL DE BIeNeS RAÍCeS </h2>
+           
+
+                <!--  UBICACIÓN DE TIPEO AUTOMÁTICO-->
+                <div class="hero-container">          
+                    <p><span class="auto-type"></span><br></br></P>
+                </div>
+
+                <!-- ANIMACIÓN TYPE -->
+                <script SRC="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+                           
+                <!-- ETIQUETA APERTURA-CIERRE DE SECUENCIA DE COMANDOS TYPE-->
+                <script>
+                  var typed= new Typed(".auto-type", {
+                    strings:["Gestión","Administración","Organización", "Proyección", "Planificación"],
+                    typeSpeed:150,
+                    backspeed:160,
+                    loop:true 
+                  })
+                </script>
+                
+                
+                <!-- BOTONES  -->
+                
+                <button type="button" class="btn btn-outline-light btn-lg m-4">INMUEBLES EN ALQUILER</button>
+                <a class="btn btn-primary" href="{% url 'login' %}" role="button">USUARIOS REGISTRADOS</a>
+
+
+
+
+      </div>
+           
+      
+    </div>
+ 
+ 
+
+
+
+<!-- INICIAR BOOTSTRAP -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.2/dist/umd/popper.min.js" integrity="sha384-q9CRHqZndzlxGLOj+xrdLDJa9ittGte1NksRmgJKeCV9DrM7Kz868XYqsKWPpAmn" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>   
+ 
+
+
+  </body>
+</html>

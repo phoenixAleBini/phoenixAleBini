@@ -1,0 +1,59 @@
+{% load i18n admin_static %}
+
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ title }} | {% endblock %}{{ site_title|default:_('Django site admin') }}</title>
+    
+
+
+    
+    {% block extrahead %}
+    
+
+                {{ block.super }}  
+
+                {% endblock %}
+                    
+    
+    {% block extrastyle %}{% endblock %}
+    
+
+
+</head>
+<body class="{% block bodyclass %}{% endblock %}">
+    {% block wrapper %}
+        <div id="container">
+            {% block container %}
+                <div id="header">
+                    <div id="branding">
+                        {% block branding %}
+                            <h1 id="site-name">
+                                <a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a>
+                            </h1>
+                        {% endblock %}
+                    </div>
+                </div>
+                {% block nav-global %}{% endblock %}
+                {% block nav-sidebar %}{% endblock %}
+                {% block messages %}
+                    {% if messages %}
+                        {% messages %}
+                    {% endif %}
+                {% endblock %}
+                {% block coltype %}{% endblock %}
+                <div id="content" class="{% block coltype %}colM{% endblock %}">
+                    {% block content %}{% endblock %}
+                    <br class="clear">
+                </div>
+            {% endblock %}
+        </div>
+    {% endblock %}
+
+    {% endblock %}
+</body>
+</html>
+
+

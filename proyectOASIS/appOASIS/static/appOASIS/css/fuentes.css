@@ -1,0 +1,37 @@
+@font-face {                    
+  font-family:StencilB;
+  src:url(../fuentes/Exodus-StencilBold.otf);
+    }
+
+
+@font-face {                    
+  font-family:Stencil;
+  src:url(../fuentes/Exodus-Stencil.otf);
+    }
+
+
+@font-face {                    
+  font-family:Regular;
+  src:url(../fuentes/Exodus-Regular.otf);
+    }
+
+
+    @font-face {                    
+      font-family:Wide;
+      src:url(../fuentes/Exodus-Wide.otf);
+        }
+
+
+
+        @font-face {                    
+          font-family:WideB;
+          src:url(../fuentes/Exodus-WideBold.otf);
+            }
+    
+
+            @font-face {                    
+              font-family:StenB;
+              src:url(../fuentes/Exodus-StencilBold.otf);
+                }
+                       
+        

@@ -1,0 +1,17 @@
+{% extends 'admin/base_site.html' %}
+
+{% block content %}
+    {{ block.super }}
+
+    {% if warning_message %}
+        <div class="warning-message">
+            {{ warning_message }}
+        </div>
+    {% endif %}
+{% endblock %}
+
+
+<!-- Esta plantilla se utiliza para mostrar los detalles de una instancia específica 
+    de la clase Propiedadcontratoaumentos. Es la vista de detalle de 
+    una instancia individual, donde puedes agregar contenido adicional 
+    y personalizar la visualización de los detalles. -->

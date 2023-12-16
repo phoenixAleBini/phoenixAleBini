@@ -1,0 +1,184 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.108.0">
+    <title>Members</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
+
+    
+   
+<!----------CSS------------->
+  <link href="{% static 'appMEGA/css/style.css' %}" rel="stylesheet">
+
+
+  <!-- INICIAR FUENTES -->
+  <link href="{% static 'appMEGA/css/fuentes.css' %}" rel="stylesheet">
+  
+  
+
+
+
+  <!-- Bootstrap  -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+   <!------ICONOS---------------------------------------------------------------
+    web ionicons.com - versión abajo - selecciono -usage - installation---------> 
+  <link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
+    
+
+
+
+    <style>
+      .navcolor {background-color: #1C3D39;}
+      
+ 
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      .b-example-divider {
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+      }
+
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
+
+      .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+      }
+
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+    </style>
+
+    
+    <!-- Custom styles for this template -->
+
+  </head>
+
+
+
+
+
+  <body>
+
+    
+<!-----------------------------HEADER-------------------------------------->
+
+        <header class="navbar navbar-dark sticky-top  flex-md-nowrap p-0 ">
+
+            
+        </header>
+<!---------------NAVEGADOR  VERTICAL------------------->
+
+
+    <div class="container-fluid">
+        <div class="row">
+
+          <div class="col-md-2"  style="background-color: rgb(141, 189, 199); height: 100vh; overflow-y: scroll;position: fixed;">
+            <div class="list-group" style="margin-top: 80px;">
+
+                <div class="sidebar-container ">
+                    <h1>Business Analytic Model</h1>
+                    <p >SISTEMA INTEGRAL DE BIENES RAÍCES</p>
+                </div>
+  
+              <button type="button" class="list-group-item list-group-item-action" style="height: 30px;margin-bottom: 10px";>Regresar al Dashboard</button>
+              <button type="button" class="list-group-item list-group-item-action "style="height: 30px;margin-bottom: 10px">Salir del Dashboard</button>
+
+            </div>
+          </div>
+  
+
+<!------------------------- MAIN --------------------------->
+          
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Generador de Facturas</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+
+                    <div class="btn-group me-2">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Compartir</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Imprimir</button>
+                    </div>
+                
+                </div>
+      </div>
+
+<!--####################### FORMULARIO FACTURA 1 ############################-->
+
+      
+      <form class="form-inline mt-3 mb-2" id="FACTURA 1" method="POST" action="{% url 'facturas' %}" >
+ 
+    <!------------------- PRIMER LINEA: FECHA Y HORA----------------------> 
+  
+                        {% csrf_token %}
+                        <label for="tipocomprobante">Tipo de Comprobante:</label>
+                        <input type="text" id="tipocomprobante" name="tipocomprobante" value="{{ tipocomprobante }}" readonly>
+                        <!-- Otros campos del formulario -->
+                        <button type="submit">Generar Factura</button>
+
+
+
+
+
+
+      </form>
+
+    </main>
+
+
+
+    
+<script src="{% static 'appMEGA/js/liquidMF.js' %}"> </script>
+     
+
+ 
+<!-- INICIAR BOOTSTRAP -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.2/dist/umd/popper.min.js" integrity="sha384-q9CRHqZndzlxGLOj+xrdLDJa9ittGte1NksRmgJKeCV9DrM7Kz868XYqsKWPpAmn" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>   
+
+
+     </body>
+</html>

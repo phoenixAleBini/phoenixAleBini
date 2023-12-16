@@ -1,0 +1,585 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.108.0">
+    <title>Dashboard</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
+
+    
+   
+<!----------CSS------------->
+  <link href="{% static 'appMEGA/css/style.css' %}" rel="stylesheet">
+
+
+  <!-- INICIAR FUENTES -->
+  <link href="{% static 'appMEGA/css/fuentes.css' %}" rel="stylesheet">
+  
+  
+
+
+
+  <!-- Bootstrap  -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+   <!------ICONOS---------------------------------------------------------------
+    web ionicons.com - versión abajo - selecciono -usage - installation---------> 
+  <link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
+    
+
+
+
+  <style>
+
+
+
+      @font-face {
+        font-family:Amalfi;
+        src:url(../fuentes/Amalfi\ Coast.ttf);
+          }
+          #sidebarMenu  h1{               /** Business Analytic Model**/
+          font-family:Amalfi;
+          font-size: 14px; 
+          font-weight: bold;
+          color: white;
+          }
+
+
+      @font-face {
+          font-family:VoniqueB;
+          src:url(../fuentes/Vonique\ 64\ Bold.ttf);
+      }
+      
+      #sidebarMenu    p{           /** SISTEMA INTEGRAL DE BIENES RAÍCES**/
+
+            font-family:VoniqueB;
+            margin-top: 20px;
+            font-size: 12px;
+            color: aliceblue;
+            font-weight: bold;
+        }
+
+
+
+      .navcolor {background-color: #2a4642;}  /*COLOR FONDO SIDEBARMENU*/
+
+      #sidebarMenu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%; /* La altura se ajustará automáticamente */
+        width: 280px; /* Ajusta el ancho según tus necesidades */
+      }
+
+
+      .sidebar-container {
+        padding-top: 40px;    /* Espacio de relleno en la parte superior */
+        padding-right: 10px;  /* Espacio de relleno en la parte derecha */
+        padding-bottom: 15px; /* Espacio de relleno en la parte inferior */
+        padding-left: 10px;   /* Espacio de relleno en la parte izquierda */
+      }
+
+      .cuerpo-principal {
+        position: sticky;
+        top: 0;
+        background-color: #fff;
+        margin-top: 20px; /* Ajusta el valor del margen superior según la altura de la sección fija superior */
+        
+      }
+
+      .seccion-fija-superior {
+        position: sticky;
+        top: 0;
+        
+        background-color: #fff;
+        /* Otros estilos necesarios */
+      }
+
+
+      .cuerpo-principal h3,   h3{           
+            font-family:VoniqueB;
+            margin-top: 26px;
+            font-size: 20px;
+            color: rgb(32, 74, 2);
+            font-weight: bold;
+            }
+
+
+      /* dar formato a la botonera del navegador lateral*/
+
+        .button-container {
+            display: flex;
+            justify-content: center; /* Centra horizontalmente los elementos */
+          }
+
+          .button-list {
+            list-style: none;
+            padding: 0;
+            width: 80%;
+          }
+
+          .button-list li {
+            margin-bottom: 10px;
+            text-align: center; /* Centra los botones horizontalmente */
+          }
+
+          .button-list li a {
+            display: flex; /* Utiliza el modelo de caja flexible para centrar verticalmente el contenido */
+            align-items: center; /* Centra verticalmente el contenido */
+            justify-content: center; /* Centra horizontalmente el contenido */
+            padding: 10px;
+            border: none; /* Elimina el borde */
+            border-radius: 10px; /* Agrega bordes redondeados */
+            text-decoration: none;
+            color: #225522; /* Cambia el color del texto a verde oscuro */
+            background-color: #fff; /* Cambia el color de fondo a blanco */
+            height: 40px; /* Establece la altura deseada para los botones */
+          }
+
+          .button-list li a:hover {
+            background-color: #e5e5e5; /* Cambia el color de fondo al pasar el cursor por encima */
+          }
+
+          .custom-button:hover {
+            color: #5a5704; /* Dorado oscuro */
+          }
+          .custom-button .icon {
+            font-size: 24px; /* Ajusta el tamaño del icono según tus necesidades */
+            margin-right: 8px; /* Ajusta el espacio entre el icono y el texto según tus necesidades */
+          }
+
+          .custom-button .button-text {
+            display: inline-block; /* Permite ajustar el espacio entre el icono y el texto */
+          }
+
+
+  /* dar formato a los botones de Formularios*/
+
+          .custom-rectangle h2{
+            background-color: #2a4642;
+            border-radius: 10px;
+            padding: 20px;
+            color: #ffffff;
+            font-family:Amalfi;
+            font-size: 20px; 
+            font-weight: bold;
+            height: 200px; /* Ajusta la altura según tus necesidades */
+          }
+
+    
+          .button-container-formularios {
+            display: flex;  /*los elementos hijos del contenedor se comportarán como elementos flexibles */
+            justify-content: space-between;  /*distribuye los elementos de manera uniforme a lo largo del contenedor */
+            padding: 0 80px; /* 80px de padding a la derecha e izquierda */
+            margin-top: -80px;
+          }
+
+          .custom-button-formularios {
+            width: 200px;
+            max-width: 200px;
+            height: 200px;
+            
+            background:  #f9f1f6;
+            border: none;
+            color:#182926; 
+                    
+            padding: 20px
+          }
+
+          .custom-button-formularios .small-text {
+            font-size: 16px;
+            line-height: 1.2;
+          }
+
+          .custom-button-formularios .large-text {
+            font-size: 20px;
+            line-height: 1.2;
+          }
+ 
+    </style>
+
+
+
+  </head>
+  <body>
+
+    
+<!-----------------------------HEADER-------------------------------------->
+
+<header class="navbar navbar-dark sticky-top  flex-md-nowrap p-0 ">
+
+    
+</header>
+
+
+<!--cuadro completo de todo el ancho de pantalla-->
+
+<div class="container-fluid ">
+  <div class="row ">
+
+<!---------------NAVEGADOR  VERTICAL------------------->
+
+    <nav id="sidebarMenu" class="col-md-3  mt-3 mt-4 col-lg-2 d-md-block navcolor sidebar collapse ">
+      <div class="sidebar-container mt-4">
+
+        <h1>Business Analytic Model</h1>
+        <p>SISTEMA INTEGRAL DE BIENES RAÍCES</p> <br>
+
+    
+        <div class="button-container">
+          <ul class="button-list">
+
+            <li class="nav-item">
+              <a class="nav-link active custom-button" aria-current="page" href="#dashboard">
+                <span data-feather="home" class="align-text-bottom"></span>
+                <i class="icon ion-md-apps"></i>
+                <span class="button-text">Dashboard</span>
+              </a>
+            </li>
+      
+
+            <li class="nav-item">
+              <a class="nav-link active custom-button" href="#alertas">
+                <span data-feather="file" class="align-text-bottom"></span>
+                <i class="icon ion-md-alert"></i>
+                <span class="button-text">Alertas</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active custom-button" href="#">
+                <span data-feather="shopping-cart" class="align-text-bottom"></span>
+                <i class="icon ion-md-contacts"></i>
+                <span class="button-text">Contactos</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active custom-button" href="#">
+                <span data-feather="users" class="align-text-bottom"></span>
+                <i class="icon ion-md-calculator"></i>
+                <span class="button-text">Cuenta Corriente</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active custom-button" href="#">
+                <span data-feather="bar-chart-2" class="align-text-bottom"></span>
+                <i class="icon ion-md-construct"></i>
+                <span class="button-text">Mantenimiento</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active custom-button" href="#">
+                <span data-feather="layers" class="align-text-bottom"></span>
+                <i class="icon ion-md-key"></i>
+                <span class="button-text">Inmuebles</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active custom-button" href="#">
+                <span data-feather="file-text" class="align-text-bottom"></span>
+                <i class="icon ion-md-clipboard"></i>
+                <span class="button-text">Pendientes</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active custom-button" href="#formularios">
+                <span data-feather="file-text" class="align-text-bottom"></span>
+                <i class="icon ion-md-checkbox"></i>
+                <span class="button-text">Formularios</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active custom-button" href="#">
+                <span data-feather="file-text" class="align-text-bottom"></span>
+                <i class="icon ion-md-analytics"></i>
+                <span class="button-text">Evolución</span>
+              </a>
+            </li>          
+            <li class="nav-item">
+              <a class="nav-link active custom-button" href="#">
+                <span data-feather="file-text" class="align-text-bottom"></span>
+                <i class="icon ion-md-locate"></i>
+                <span class="button-text">Ubicación</span>
+              </a>
+            </li>
+            
+
+          
+        </ul>
+        
+      </div>
+
+
+
+    </nav>
+
+
+
+
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="cuerpo-principal d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom seccion-fija-superior">
+        
+        
+    <!-- BARRA SUPERIOR DE TITULO PRINCIPAL Y BOTONES IMPRESIÓN E EMAIL-->
+          <h3>PANEL INTEGRADO PARA LA GESTIÓN DE RECURSOS EMPRESARIALES Y RELACIONES CON EL CLIENTE</h3>
+        <div class="btn-toolbar mb-2 mb-md-0">
+              <div class="btn-group me-2">
+                <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+              </div>
+
+              <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                <span data-feather="calendar" class="align-text-bottom"></span>
+                This week
+              </button>
+        </div>
+      </div>
+    
+      <canvas class="my-4 w-100" id="myChart" width="200" height="1"></canvas>
+    
+    <!-- DIVISORES DE CADA SECCIÓN -->
+
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div id="dashboard">
+              <h2><br> <br><br></h2>
+            </div>
+            <div class="custom-rectangle">
+              <h2>Dashboard</h2>
+            </div>
+            <br> <br> <br> <br> <br> <br>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div id="alertas">
+              <h2><br> <br><br></h2>
+            </div>
+            <div class="custom-rectangle">
+              <h2>Alertas</h2>
+            </div>
+            <br> <br> <br> <br> <br> <br>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="container-formularios">
+        <div class="row">
+          <div class="col-md-12">
+                <div id="formularios">
+                  <h2><br> <br><br></h2>
+                </div>
+      
+            <div class="custom-rectangle">
+                  <h2>Formularios</h2>
+
+                  <div class="button-container-formularios">
+
+
+                    <button class="custom-button-formularios">
+                      <span class="small-text">Liquidación de alquileres</span>
+                      <br><br>
+                      <span class="large-text" style="font-family: VoniqueB;">ByC</span> 
+                    </button>
+
+                    <button id="boton-megaforever" class="custom-button-formularios">
+                      <span class="small-text">Liquidación de alquileres</span>
+                      <br><br>
+                      <span class="large-text" style="font-family: VoniqueB;">MEGA FOREVER</span> 
+                    </button>   <!-- requiere script -->>
+                
+
+                    <button class="custom-button-formularios">
+                      <span class="small-text">Liquidación de alquileres</span>
+                      <br><br>
+                      <span class="large-text" style="font-family: VoniqueB;">AGUSTÍN</span> 
+                    </button>
+
+                    <button class="custom-button-formularios">
+                      <span class="small-text">Liquidación de alquileres</span>
+                      <br><br>
+                      <span class="large-text" style="font-family: VoniqueB;">PERÍODO INICIAL IRREGULAR</span> 
+                    </button>
+
+                  </div>
+              
+            </div>  
+                
+           
+
+
+          </div>
+        </div>
+      </div>
+
+           <br> <br> <br> <br> <br> <br><br> <br> <br> <br> <br> <br>
+
+
+  </div>
+      
+      
+      <div class="table-responsive">
+        <table class="table table-striped table-sm">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Header</th>
+              <th scope="col">Header</th>
+              <th scope="col">Header</th>
+              <th scope="col">Header</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1,001</td>
+              <td>random</td>
+              <td>data</td>
+              <td>placeholder</td>
+              <td>text</td>
+            </tr>
+            <tr>
+              <td>1,002</td>
+              <td>placeholder</td>
+              <td>irrelevant</td>
+              <td>visual</td>
+              <td>layout</td>
+            </tr>
+            <tr>
+              <td>1,003</td>
+              <td>data</td>
+              <td>rich</td>
+              <td>dashboard</td>
+              <td>tabular</td>
+            </tr>
+            <tr>
+              <td>1,003</td>
+              <td>information</td>
+              <td>placeholder</td>
+              <td>illustrative</td>
+              <td>data</td>
+            </tr>
+            <tr>
+              <td>1,004</td>
+              <td>text</td>
+              <td>random</td>
+              <td>layout</td>
+              <td>dashboard</td>
+            </tr>
+            <tr>
+              <td>1,005</td>
+              <td>dashboard</td>
+              <td>irrelevant</td>
+              <td>text</td>
+              <td>placeholder</td>
+            </tr>
+            <tr>
+              <td>1,006</td>
+              <td>dashboard</td>
+              <td>illustrative</td>
+              <td>rich</td>
+              <td>data</td>
+            </tr>
+            <tr>
+              <td>1,007</td>
+              <td>placeholder</td>
+              <td>tabular</td>
+              <td>information</td>
+              <td>irrelevant</td>
+            </tr>
+            <tr>
+              <td>1,008</td>
+              <td>random</td>
+              <td>data</td>
+              <td>placeholder</td>
+              <td>text</td>
+            </tr>
+            <tr>
+              <td>1,009</td>
+              <td>placeholder</td>
+              <td>irrelevant</td>
+              <td>visual</td>
+              <td>layout</td>
+            </tr>
+            <tr>
+              <td>1,010</td>
+              <td>data</td>
+              <td>rich</td>
+              <td>dashboard</td>
+              <td>tabular</td>
+            </tr>
+            <tr>
+              <td>1,011</td>
+              <td>information</td>
+              <td>placeholder</td>
+              <td>illustrative</td>
+              <td>data</td>
+            </tr>
+            <tr>
+              <td>1,012</td>
+              <td>text</td>
+              <td>placeholder</td>
+              <td>layout</td>
+              <td>dashboard</td>
+            </tr>
+            <tr>
+              <td>1,013</td>
+              <td>dashboard</td>
+              <td>irrelevant</td>
+              <td>text</td>
+              <td>visual</td>
+            </tr>
+            <tr>
+              <td>1,014</td>
+              <td>dashboard</td>
+              <td>illustrative</td>
+              <td>rich</td>
+              <td>data</td>
+            </tr>
+            <tr>
+              <td>1,015</td>
+              <td>random</td>
+              <td>tabular</td>
+              <td>information</td>
+              <td>text</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    
+
+
+
+
+
+
+    
+     
+    
+    
+  
+  
+
+<!-- INICIAR BOOTSTRAP -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.2/dist/umd/popper.min.js" integrity="sha384-q9CRHqZndzlxGLOj+xrdLDJa9ittGte1NksRmgJKeCV9DrM7Kz868XYqsKWPpAmn" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>   
+
+
+  
+  
+  
+  
+    </body>
+</html>

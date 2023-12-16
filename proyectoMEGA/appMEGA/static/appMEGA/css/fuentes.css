@@ -1,0 +1,43 @@
+@font-face {                      /** Business Analytic Model**/
+    font-family:Amalfi;
+    src:url(../fuentes/Amalfi\ Coast.ttf);
+      }
+      .sidebar-container h1{               
+      font-family:Amalfi;
+      font-size: 14px; 
+      line-height: 2.5;     /* Ajusta el valor para aumentar el interlineado */
+      font-weight: bold;
+      color: white;
+
+      }
+
+      @font-face {
+        font-family:Amalfi;
+        src:url(../fuentes/Amalfi\ Coast.ttf);
+          }
+          .sidebar-container h1{               /** Business Analytic Model**/
+          font-family:Amalfi;
+          font-size: 14px; 
+          font-weight: bold;
+          color: white;
+          }
+
+
+      @font-face {
+          font-family:VoniqueB;
+          src:url(../fuentes/Vonique\ 64\ Bold.ttf);
+      }
+      
+      #sidebarMenu  .sidebar-container  p{           /** SISTEMA INTEGRAL DE BIENES RAÍCES**/
+
+            font-family:VoniqueB;
+            margin-top: 20px;
+            font-size: 12px;
+            color: aliceblue;
+            font-weight: bold;
+        }
+
+
+
+
+
