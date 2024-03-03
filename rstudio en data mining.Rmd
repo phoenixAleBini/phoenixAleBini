@@ -1,0 +1,769 @@
+---
+title: "rstudio en data mining"
+output: 
+  pdf_document:
+    keep_tex: true
+    latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, eval = FALSE)
+
+
+## <u>Empezar a trabajar</u>
+### **SI EMPIEZO DE 0:**
+
+1. **PRIMERO VOY AL EXPLORADOR DE WINDOWS/LINUX/...** 
+	  - CREO CARPETA DONDE GUARDARÉ TODOS LOS ARCHIVOS DEL PROYECTO
+
+2. **FILE -> NEW PROJECT**
+    - al crear un proyecto (guardado dentro de la carpeta que cree antes),  se genera automáticamente el directorio. ES SUPER IMPORTANTE HACERLO. Este proyecto es el espacio de trabajo donde estarán todos los script/notebook/markdown creados en R
+	
+3. **FILE -> NEW FILE -> RScript**  
+    -  código + comentarios precedidos por # para ver en el entrono de R
+                           -> R notebook o  
+                           
+   **FILE -> NEW FILE -> RNotebook**   
+    -  combina formato Markdown y bloques de código R en archivo .Rmd.
+    - puedes ejecutar celdas de código individualmente, y los resultados de esas celdas se mostrarán en el entorno del notebook 
+    - Luego, al renderizar el documento completo, solo verás las celdas que hayas ejecutado junto con el texto y los resultados generados por esas celdas.
+    
+    **FILE -> NEW FILE -> RMarkdown**
+    - combina formato Markdown y bloques de código R en archivo .Rmd.
+    - Renderiza el documento con la función rmarkdown::render o el botón "Knit" para generar el documento de salida (por ejemplo, PDF).
+    - Durante la renderización, el código R se ejecuta en secuencia y los resultados se incorporan al documento final.
+
+### **SI YA HABÍA INICIADO ANTES UN DOCUMENTO:** 
+           
+ ABRO RSTUDIO Y SI NO  SE ABRIÓ EL SCRIPT/NOTEBOOK O MARKDOWN, SIMPLEMENTE ABRO EL QUE NECESITO
+
+# -->
+ 
+
+<hr style="border: 2px solid black;">
+
+
+## <u>DESCARGAR ARCHIVOS DE DATOS EN R</u>
+
+
+*Recomendación, si los archivos están en el mismo ordenador que está la carpeta de entono R, ubicarlos dentro de ella*
+
+
+### **SI ES UN ARCHIVO DE EXCEL:**
+
+```{r}
+library(readxl)
+
+```
+                               
+
+### **SI ES UN csv:**
+
+```{r}
+ruta_archivo <- "C:/Users/Usuario/Documents/Curso Data Mining/housing.csv"
+
+```
+
+
+### **Si son conjuntos de datos incluidos en rstudio no NECESITAS este paso. Los casos: **
+- mtcars
+- iris
+- AirPassengers
+- Titanic
+- ChickWeight
+- faithful
+- CO2
+- USArrests
+- swiss
+
+<hr style="border: 2px solid black;">
+
+
+
+## <u>LEER EL CONJUNTO DE DATOS EN R</u>
+
+### **Para leer un csv**
+```{r}
+df <- read.csv(ruta_archivo, na.strings = c("NA"))
+
+```
+
+*Esta es la lectura adecuada si se que los valores vacío vienen con el texto NA. Si vienen simplemente vacío debe ponerse na.strings = c("")*
+
+
+### **Para leer un excel**
+
+```{r}
+df <- read_excel('nombre_archivo.xlsx', sheet = 'n')
+
+```
+
+
+
+
+
+* df es el nombre que le ponemos al dataset
+* archivo.xlsx   es el nombre del archivo excel  (no necesito poner la ruta completa si está en la misma carpeta en que trabajas tu proyecto R
+* sheet  es el nombre de la hoja de excel
+
+
+
+
+### **Para leer conjuntos de datos incluidos en RStudio**
+
+
+```{r}
+df <- mtcars
+```
+
+
+
+<hr style="border: 2px solid black;">
+
+## <u>INICIAR EL ANÁLISIS EDA</u>
+
+### **Primeras impresiones**
+
+```{r}
+View(df)
+```
+
+
+```{r}
+str(df)
+```
+
+
+Con estas dos líneas puedes redactar las apreciaciones del primer encuentro con el dataset:
+
+- ¿qué hecho puede investigar este dataset?
+- Número de observaciones o registros que dispones para llevar adelante tu investigacíón
+- Número de variables que pueden explicar el hecho que estamos investigando
+- Tipo de dato en cada campo. ¿Es el que necesitamos? ¿Hay variables categóricas?
+- ¿Observas alguna fila o columna con algún comportamiento particular?
+- ¿Puedes anticipar algún aspecto adicional mirando el conjuntode datos?
+
+
+
+### **Si tienes valores categóricos necesitas convertirlos a factor**
+
+```{r}
+
+df$coln <- factor(df$coln)
+
+```
+
+### **Si necesitás cambiar el tipo de dato de alguna de tus variables sigue la instrucción as.**
+
+
+```{r}
+
+df$coln <- as.character(df$coln)
+
+```
+
+Deja expresado en palabras los cambios que has hecho en tipos de datos
+
+
+
+
+### **¿Hay columnas que que no te servirán?** 
+
+*Al ver el conjunto de datos encuentra por ejemplo, número de id o código u otras variables que no aportan nada a tu estudio. Si las hay, debes eliminarlas*
+
+
+
+```{r}
+library(dplyr)
+
+df <- df %>%select(-coln)
+
+
+```
+
+
+*Recuerda que cada librería se introduce una sola vez en el documento y conviene ponerla al comienzo, luego del título y output   y coln es el nombre de la columna a reemplazar*
+Deja sentado claramente si has eliminado alguna columna
+
+
+
+### **Elimina los registros duplicados** 
+
+```{r}
+df <-unique(df)
+nrow(df)
+
+```
+
+*La función unique rastrea y elimina las filas u observaciones duplicadas y  nrow dice con cuántas filas te quedas luego de elimnar duplicados. Importante cotejar con las que tenías inicialmente.*
+debes deja expresado cuántos observaciones duplicadas había inicialmente y cuantas se eliminaron si aplicaste esta instrucción.
+
+
+
+### **Evalúa los valores perdidos o nulo o NA**
+
+*Ten en cuenta que is.na() considerará tanto NA como valores vacíos en tudataset al hacer la cuenta total*
+
+*Observa la suma total de NA en el conjunto de datos* 
+
+```{r}
+num_nas_tot <- sum(is.na(df))
+num_nas_tot
+
+```
+
+Luego observa  y expresa la cantidad de NA en cada columna.
+
+```{r}
+num_nas_coln <- sum(is.na(df$coln))
+num_nas
+
+```
+
+*Agrego este código  para ver exclusivamente todas las filas con NA del dataset*
+
+```{r}
+datos_con_na <- df[!complete.cases(df), ]
+datos_con_na
+
+```
+
+Contar que se ve  la gráfica:
+- ¿Qué porcentaje de NA en el total de observaciones de cada columna tienes?
+- ¿Tienes observaciones con presencia de NA en varias columnas? 
+- ¿Podrías eliminar esas observaciones sin afectar demasiado el total de observaciones del conjunto de datos? 
+-¿O vale la pena reemplazarlas?
+
+*A continuación hay tres alternativas para manejar los NA. Recomiendo ejecutar las 3, asignar cada una a un df1, df2 y df3, y seguir luego el análisis con cada una de las tres alternativas para ver cual responde mejor*
+
+
+### **¿Eliminar NA's?**
+
+*Este enfoque eliminará las filas que contienen al menos un NA en alguna columna.*
+
+```{r}
+df_sin_na <- na.omit(df)
+
+```
+
+
+
+
+### **Reemplazo Express**
+*Tienes muy pocos NA pero prefieres no elimnar esas filas, pero tampoco se justifica un reemplazo más complejo*
+
+```{r}
+library(dplyr)
+df_na_mediana <- df %>% 
+  mutate(coln = ifelse(is.na(colns), median(coln, na.rm = TRUE), coln))
+
+```
+
+*donde coln es el nombre de la columna en la que reemplazo los NA
+
+
+### **missForest**
+
+*Ten en cuenta que el algoritmo missForest no imputa solo los valores NA faltantes; también puede modificar los valores no faltantes en función de las imputaciones realizadas para los valores faltantes.Por eso es importante ver como impacta esto en el análisis posterior*
+
+```{r}
+library (missForest)
+
+```
+
+*Recuerda que las librerías van al comienzo y sólo se cargan una vez en el script*
+
+
+
+```{r}
+
+imputed_data <- missForest(df, verbose = TRUE, variablewise = TRUE)
+
+```
+
+*imputed_data es el objeto que contiene toda la información relacionada con el proceso de imputación, incluidas las métricas y otros detalles del modelo.*
+
+
+```{r}
+
+imputed_data$OOBerror
+
+```
+
+*La devolución de esta instrucción traerá dos valores:  NRMSE  y  PFC.*
+*NRMSE mide la precisión del modelo de imputación. Un NRMSE más bajo indica una mayor precisión. En términos generales: si es cercano a 0, se considera una precisión muy alta y si es cercano a 1, indica una menor precisión.*
+*PFC mide la proporción de falsos ceros en las imputaciones. Un PFC de 0 indica que no hay falsos ceros.O sea un PFC cercano a o habla de una imputación más precisa*
+
+```{r}
+
+df_imputed <- imputed_data$ximp
+View(df_imputed)
+
+```
+
+*Con esta última instrucción accedemos al dataset con las imputaciones realizadas por el missForest*
+
+
+```{r}
+
+num_na_imputados <- sum(is.na(df_imputed))
+num_na_imputados
+
+```
+
+Verificamos y expresmos la ausencia de NA en el nuevo dataset imputado
+
+*En general, proporciones bajas de imputación sobre el total de observaciones, como hasta el 20%, pueden ser consideradas aceptables, pero esto también dependerá del contexto.  Hay que tener en cuenta el tamaño total del conjunto de datos al interpretar las métricas. En general, cuanto más pequeño es, la pérdida de observaciones podría tener un impacto más significativo. Si tu conjunto de datos es pequeño digamos, como máximo 200 observaciones, podrías dar más importancia a la proporción de valores imputados. Lamentablemente, missForest no proporciona de manera directa una métrica que cuantifique el porcentaje de cambios realizados en el conjunto de datos.*
+*Para tener otro parámetro más para evaluar el missForest, podemos considerar que a priori, missForest reemplazó los NA. Pero tendríamos que comprobar si hizo más cambios fuera de estos NA. Si sumamos ambos cambios, tendremos los cambios totales que hizo missForest y así podremos calcular el porcentaje que representan sobre el total de valores.*
+
+
+```{r}
+
+diferencias <- sum(!is.na(df) & !is.na(df_imputed))
+diferencias
+
+```
+
+
+**La elección de la técnica de imputación puede afectar los resultados del análisis.Puede ser útil probar varias técnicas de imputación y comparar cómo afectan tus resultados. Algunas situaciones pueden beneficiarse de un enfoque más simple, mientras que otras pueden requerir métodos más avanzados.**
+
+Debe quedar expresada una conclusión acerca de la confianza que depositamos en este missForest, de acuerdo a las medidas que arrojó al correrlo y al porcentaje de cambios que afectaron al dataset al correrlo. Esto si corrimos el missForest y si no que tratamiento aplicamos  a los NA
+
+
+
+
+### **LOS OUTLIERS**
+
+
+```{r}
+
+g_caja <- boxplot(df$coln, col="skyblue", frame.plot=F)
+
+```
+
+Analizamos primero y expresamos el estado inicial de los outliers para cada variable. ¿Aparecen outliers?¿ Estos valores, son valores posibles en los hechos o son más factibles como consecuencia de un error de carga? 
+
+*Si son producto de error y no constituyen base para la explicación del hecho investigado, estos outliers pueden ser eliminados para mejorar la interpretación así como la precisión y confiabilidad de los resultados*
+
+```{r}
+
+g_caja$out
+options(max.print = 2000)  # Ajusta el límite de impresión de filas. Ajustar si al imprimir caja hay omisiones
+outliers_ordenados <- sort(g_caja$out)
+outliers_ordenados
+
+```
+
+*g_caja$out es el objeto creado por la función boxplot en R, que contiene los valores que son considerados como posibles outliers en un gráfico de caja y bigotes. Estos valores son aquellos que caen fuera de los "bigotes" del gráfico de caja.*
+*Allí puedo seleccionar aquellos de los que me voy a deshacer, poniendo un umbral y reemplazandolos por:*
+
+**- LA MEDIANA Si la distribución de tus datos es asimétrica**
+
+
+```{r}
+df$coln[df$coln > numero_umbral <- median(df$coln)
+
+boxplot(df$coln, col="skyblue", frame.plot=F)
+
+
+```
+
+*Reemplazar el numero_umbral por el valor de corte elegido de outliers_ordenados*
+
+
+**- LA MEDIA Si la distribución es más simétrica y los outliers son atípicos**
+
+```{r}
+media <- mean(df$coln)
+df$coln[df$coln > numero_umbral <- mean(df$coln)
+boxplot(df$coln, col="skyblue", frame.plot=F)
+
+```
+
+
+**- SI DECIDO DESHACERME DE LAS OBSERVACIONES QUE INCLUYEN ESOS VALORES**
+
+```{r}
+
+df$coln[!df$coln > numero_umbral]
+
+boxplot(df$coln, col="skyblue", frame.plot=F)
+
+
+```
+Finalmente se expresa que tratamiento se decidió darle a los outliers si es que existían y en caso de haberlo hecho como resultó la nueva caja de bigotes
+
+
+
+
+### **GANAR INTUICIÓN EN LA DISTRIBUCIÓN DE CADA VARIABLE  CONTINUA**
+
+```{r}
+
+hist(df$coln, main="Histograma")
+
+```
+
+Para cada una de las variables, deben explicar como está el histograma ahora, luego de  haberle tratado los missing values o NS y los outliers. Pueden contar entre que valores se encuentran concentradas la mayor cantidad de observaciones de la variable, si hay aún  valores que difieren mucho de los de esta concentración, y tratar de explicar por qué esto es así en el hecho que están analizando
+
+*Aplicamos esta visualización en las variables continuas, las discretas o categóricas las avaluaremos con la siguiente visualizaciñon*
+
+
+
+### **VISUALIZAR QUE SUCEDE CON CADA VARIABLE CATEGÓRICA**
+
+```{r}
+
+pie(table(df$coln))
+
+
+```
+
+
+
+```{r}
+
+barplot(table(df$coln), col = "skyblue", main = "Gráfico de Barras para ocean_proximity")
+
+```
+
+Elegir para cada variable una de las dos gráficas y relatar que se observa en el gráfico, si hay una o más categorías que concentran la mayor parte de observaciones. También se puede expresar si los valores de la variable están repartidos entre demasiadas categorías distintas.
+
+
+**EXAMINAR LA RELACIÓN ENTRE VARIABLES  CATEGÓRICAS**
+
+*Las tablas de contingencia son una forma de organizar y mostrar la distribución conjunta de dos o más variables categóricas (por ejemplo, analizar categoria de producto por género del consumidor)*
+
+
+```{r}
+
+tabla_contingencia <- table(df$coln, df$colm)
+
+```
+
+*El mosaico es una herramienta gráfica especialmente útil cuando estás trabajando con tablas de contingencia, que muestran la frecuencia conjunta de dos o más variables categóricas.*
+
+```{r}
+mosaicplot(table(df$coln, df$colm), main = "Relación entre variables categóricas")
+
+```
+
+
+
+### **TRANSFORMAR VARIABLES CONTINUAS EN CATEGÓRICAS, CON REDUCCIÓN DE CATEGORÍAS**
+
+*Puedes agrupar categorías similares para reducir el número total de categorías.*
+
+
+```{r}
+
+
+# Elegir los valores que definirán los cortes entre categorías (poner el primero, los intermedios, y el último valor de la serie)
+
+intervalos <- c(18, 25, 35, 45, 55, 100)   # valores de ejemplo
+
+
+
+# Aplicar la función cut para agrupar las edades en los intervalos definidos
+
+grupos <- cut(coln, breaks = intervalos, labels = c("18-25", "26-35", "36-45", "46-55", "55+"))   
+
+
+library(ggplot2)
+
+
+# Aplicar la función cut_number para agrupar automáticamente en 5 grupos
+
+grupos_coln_auto <- cut_number(coln, n = 5)   #n es el número de categorías que buscas.
+
+
+# Agregar la nueva variable al data.frame existente
+
+df$coln_grupo <- grupos_coln_auto
+
+
+# probablemente elijas eliminar  del análisis la columna en su versión original
+
+df <- df %>% select(-coln)
+
+
+```
+
+
+
+### **REDUCCIÓN DE CATEGORÍAS EN VARIABLE CATEGÓRICA**
+
+
+*Si hay un gran número de categorías, podrías seleccionar solo las categorías más frecuentes o significativas y agrupar el resto en una categoría "otros". Esto se llama "top N categorías" y ayuda a destacar las categorías más relevantes.*
+
+
+```{r}
+
+# Defines el úmero de categorías que deseas conservar
+
+top_n_categorias <- 5   # 5 es sólo a modo de ejemplo
+
+# Identificar las top N categorías en el dataset df y la columna o variable coln
+
+categorias_top_n <- df %>%
+  group_by(coln) %>%
+  summarise(n = n()) %>%
+  arrange(desc(n)) %>%
+  slice_head(n = top_n_categorias) %>%
+  pull(coln)
+
+
+# Crear una nueva variable con las top N categorías y "Otros" para el resto
+
+df <- df %>%
+  mutate(coln_nueva = ifelse(coln %in% categorias_top_n, as.character(coln), "Otros"))
+
+
+```
+
+
+### **MULTICOLINEALIDAD**
+
+*Para ganar intuición respecto a la multicolinealidad entre tus variables, puedes ejecutar las siguientes matrices:*
+
+
+```{r}
+library(ggplot2)
+library(GGally)
+
+ggpairs(mi_data, title = "Matriz de Correlación")
+
+
+```
+
+
+Expresa claramente  entre que variables encuentras fuerte correlación. Ten en  cuenta que:
+
+- Si el valor de la correlación está cerca de 1, las variables tienen una relación positiva. Esto significa que cuando una variable aumenta, la otra tiende a aumentar también.
+
+- Si el valor de la correlación está cerca de -1, las variables tienen una relación negativa. Esto significa que cuando una variable aumenta, la otra tiende a disminuir.
+
+- Un valor cercano a 0 indica una débil o nula correlación lineal entre las variables.
+
+- Cuanto más cercano sea el valor a 1 o -1, más fuerte será la correlación. Ya un valor superior a 0.7,  indica preocupación por multicolinealidad.
+
+**Importante destacar que a estas alturas debes tener claro cual será la variable dependiente que definirá tu estudio y cuales las variables independientes**
+
+Deja simplemente expresadas las correlaciones que encuentres entre variable dependiente e independiente.
+
+*Las correlaciones que deben analizarse más a fondo son las que existen entre variables independientes.*
+
+
+**¿Cómo tratar la multicolinealidad entre variables independientes?**
+
+
+
+1. Eliminar una de las variables correlacionadas: Si dos variables independientes están altamente.  correlacionadas, podrías eliminar una de ellas del modelo para reducir la multicolinealidad.
+
+2. Combinar las variables: Si tiene sentido desde el punto de vista del dominio, puedes considerar combinar las variables correlacionadas en una nueva variable (sumar por ejemplo ambas, si eso aplica)
+
+3. Regularización: Puedes explorar técnicas de regularización como la regresión Ridge o Lasso para manejar la multicolinealidad.
+
+
+```{r}
+
+library(glmnet)
+
+# Ejemplo de Ridge
+
+X <- as.matrix(df[, -ncol(df)])  # Todas las columnas excepto la variable dependiente
+
+y <- df[, ncol(df)]              # columna de variable dependiente
+
+
+modelo_ridge <- cv.glmnet(x = matriz_de_predictores, y = variable_dependiente, alpha = 0)
+
+# Ejemplo de Lasso
+
+modelo_lasso <- cv.glmnet(x = matriz_de_predictores, y = variable_dependiente, alpha = 1)
+
+
+```
+
+- Ridge: Introduce una penalización en la magnitud de los coeficientes, permitiendo que todas las variables se incluyan en el modelo, pero reduciendo sus efectos.
+- Lasso: No solo penaliza la magnitud de los coeficientes, sino que también puede reducir algunos coeficientes a cero, actuando como una forma de selección de variables.
+
+4. Aplicar VIF cuando ya tengasel modelo de regresión lineal ejecutado
+
+
+**FACETING**
+
+*Buscamos explorar las relaciones entre 2 variables continuas evaluando como estas se comportan en cada uno de los diferentes subgrupos definidos por una variable categórica. Tener en cuenta que coln y colm son dos variables continuas y col_categ representa a la variable categórica
+
+
+```{r}
+
+library(ggplot2)
+
+ggplot(df, aes(x = coln, y = colm )) +
+  geom_point() +
+  facet_grid(col_categ ~ .) +
+  theme_minimal()
+
+
+```
+
+Evaluar aquellas relaciones que intuitivamente plantean alguna relación y sacar conclusiones observando las diferencias entre los patrones encontrados en cada categoría.
+
+
+<hr style="border: 2px solid black;">
+
+## <u>REGRESIÓN LINEAL</u>
+
+###**Regresión Lineal con todas las variables explicativas**
+
+*Comenzamos por ajustar la regresión lineal con las variables del modelo.*
+ 
+```{r}
+rl <- lm(formula = col_dependiente~., df)
+
+summary(rl)
+
+```
+
+*Si intuimos problemas persistentes de multicolinealidad, vamos a  examinar los valores de los VIF (Factor de Inflación de la Varianza).*
+
+```{r}
+
+library(car)
+
+vif_resultados <- vif(rl)
+
+vif_resultados
+
+
+```
+
+*Al evaluar los resutados, los valores VIF  asociados a cada una de las variables  debe considerarse que si alguno de ellos es  sustancialmente mayor que 10, hay que  considerar estrategias para manejar la multicolinealidad. La presencia de multicolinealidad no siempre significa que debas eliminar variables, pero sí indica que debes ser cauteloso en la interpretación de los coeficientes y la inferencia del modelo. Valores más elevados que otros, aunque no lleguen a 10, pueden hablar de la necesidad de tener más precaución con esas variables.*
+
+
+
+## <u> Criterio de selección de modelos AIC</u>
+
+*Ajustada la regresión lineal ya puedes aplicar criterios de selección de modelos, como el AIC (Criterio de Información de Akaike), para evaluar la calidad del modelo. El AIC es una medida que penaliza los modelos más complejos, proporcionando una forma de equilibrar la bondad del ajuste y la complejidad del modelo.*
+
+
+###**Regresión forward**
+
+*Esto indica que estás realizando una selección de variables hacia adelante, agregando una a una varibles independientes. rl0 y rl5 son nombres por convención que no necesitan ser modificados*
+
+```{r}
+
+# Definir los modelos para el paso hacia adelante (forward)
+
+rl0 <- lm(formula = col_dependiente ~ 1, data = df)  # Modelo nulo
+rl5 <- lm(formula = col_dependiente ~ ., data = df)  # Modelo con todas las variables
+
+
+
+# Realizar la selección de variables hacia adelante
+
+rl_forward <- step(rl, 
+                   scope = list(lower=rl0, upper=rl5),
+                   direction = 'forward')
+summary(rl_forward)
+
+
+```
+
+Al correr el summary  tendrás las variables seleccionadas por el método Forward. Es importante evaluar si estas variables  abarcan las  que tienen alta significancia.
+Las estrellas (*, **, ***) generalmente se utilizan como indicadores de la significancia estadística de los coeficientes asociados a cada variable independiente.
+- * : La variable tiene una significancia estadística a un nivel de confianza del 90%.
+- ** : La variable tiene una significancia estadística a un nivel de confianza del 95%.
+- *** : La variable tiene una significancia estadística a un nivel de confianza del 99%.
+
+Los coeficientes de determinación, representados por  los R2, son estadísticas que indican la proporción de la variabilidad de la variable dependiente que es explicada por el modelo de regresión.
+- Multiple R-squared (R²):  indica la proporción de la variabilidad total de la variable de respuesta que es explicada por todas las variables independientes incluidas en el modelo, el % de la variabilidad en la variable de respuesta que se explica por el modelo. 
+- Adjusted R-squared (R² ajustado): tiene en cuenta el número de variables independientes en el modelo y penaliza la inclusión de variables que no mejoran significativamente la capacidad predictiva del modelo. Se ajusta para evitar que el R2  aumente simplemente al agregar más variables independientes.
+
+La prueba F evalúa la significancia global del modelo, es decir, si al menos una de las variables independientes está relacionada de manera significativa con la variable dependiente. Un valor grande de la estadística F indica que la variabilidad explicada por el modelo es significativamente mayor que la variabilidad no explicada.  Pero este F elevado debe estar asociado a un p valor muy pequeño, menor a nivel de significación elegido, habitualmente de 0,05.
+
+
+
+**Repetiremos este análisis para el método Backward y el stepwise**
+
+
+```{r}
+
+# Realizar selección de variables hacia atrás
+
+rl_backward <- step(rl5, 
+                    scope = list(lower = rl0, upper = rl5),
+                    direction = 'backward')
+
+
+
+summary(rl_backward)
+
+
+```
+
+
+```{r}
+# regresión stepwise
+
+rl_stepwise <- step(rl0, 
+                    scope = list(lower=rl0, upper=rl5),
+                    direction = 'both')
+summary(rl_stepwise)
+
+
+```
+
+*Recuerda que la selección del modelo final debe incluir todo el trabajo exploratorio inicial  y debe realizarse con precaución. A veces, los métodos automáticos pueden llevar a la selección de modelos que se ajustan demasiado a los datos de entrenamiento y no generalizan bien a nuevos datos. La interpretación y la consideración del contexto son fundamentales para tomar decisiones informadas sobre qué modelo seleccionar*
+
+
+## <u> ANÁLISIS DE RESIDUOS>
+
+**QQ PLOT**
+
+*Si los residuales, o sea, las diferencias entre los valores observados y los valores predichos por el modelo de regresión no siguen una distribución normal, podría indicar que hay patrones no capturados por el modelo, o que el modelo no es el más adecuado para describir la relación entre las variables. Para evaluar la normalidad de los residuales, a menudo se utilizan gráficos como los gráficos cuantil-cuantil (Q-Q plots) para una mirada intuitiva de lo que está sucediendo*
+
+
+```{r}
+
+qqnorm(rl_stepwise$residuals)
+
+qqline(rl_stepwise$residuals)
+
+```
+
+
+Plantea el gráfico para cada uno de los 3 modelos conseguidos a través del AIC.
+
+
+**TEST DE SHAPIRO WILK**
+
+Realizar el test de Shapiro-Wilk  para analizar la normalidad de los residuos con más objetividad.
+
+
+```{r}
+
+# Obtener los residuos de cada modelo
+
+residuos_forward <- residuals(rl_forward)
+residuos_backward <- residuals(rl_backward)
+residuos_stepwise <- residuals(rl_stepwise)
+
+# Aplicar el test de Shapiro-Wilk a los residuos de cada modelo
+
+resultado_forward <- shapiro.test(residuos_forward)
+resultado_backward <- shapiro.test(residuos_backward)
+resultado_stepwise <- shapiro.test(residuos_stepwise)
+
+
+```
+
+
+Para la interpretación de este test, cuanto más cercano a 1 esté el estadístico W, más consistente es con la normalidad.  Por otro lado, el valor p es la probabilidad de observar  si la hipótesis nula (los datos siguen una distribución normal) es cierta. Si el valor p es mayor que el nivel de significancia elegido (por ejemplo, 0.05), no hay suficiente evidencia para rechazar la hipótesis nula de normalidad.
+
+
+
+
+
+
