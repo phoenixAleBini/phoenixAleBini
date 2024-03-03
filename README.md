@@ -6,6 +6,7 @@
 
 📌 Este repositorio pretende simplemente una presentación del proyecto que se basa inicialmente en el uso de PYTHON, DJANGO y algo de JAVASCRIPT. Luego para el análisis de datos no volcado en este código se usa Python y R, según las necesidades.
 
+:new: **Sumo al repositorio una GUÍA COMPLETA BÁSICA PARA ANÁLISIS EXPLORATORIO EDA EN RStudio, el cual incluye código para AJUSTE DE UNA REGRESIÓNLINEAL MÚLTIPLE y aplicación del CRITERIO DE SELECCIÓN AIC**
 <!--
 **phoenixAleBini/phoenixAleBini** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 :star:
